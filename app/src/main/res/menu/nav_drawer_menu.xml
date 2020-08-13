@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_restaurants_id"
+            android:icon="@drawable/ic_publish_black_24dp"
+            android:title="restaurants" />
+        <item
+            android:id="@+id/nav_map_id"
+            android:title="map" />
+        <!--        <item-->
+        <!--            android:id="@+id/nav_profile_id"-->
+        <!--            android:icon="@drawable/ic_person_black_24dp"-->
+        <!--            android:title="Profile" />-->
+        <!--        <item-->
+        <!--            android:id="@+id/nav_notebooks_id"-->
+        <!--            android:title="Notebooks"-->
+        <!--            android:icon="@drawable/ic_book_black_24dp"-->
+        <!--            />-->
+    </group>
+
+    <menu android:title="@string/account">
+        <group android:checkableBehavior="single">
+            <item
+                android:id="@+id/nav_favorites_id"
+                android:title="my favorites" />
+            <item
+                android:id="@+id/nav_reviews_id"
+                android:icon="@drawable/ic_publish_black_24dp"
+                android:title="my reviews" />
+            <item
+                android:id="@+id/nav_profile_id"
+                android:title="my profile" />
+            <!--            <item-->
+            <!--                android:id="@+id/nav_trash_id"-->
+            <!--                android:title="Trash"-->
+            <!--                android:icon="@drawable/ic_delete_black_24dp"-->
+            <!--                />-->
+
+        </group>
+
+    </menu>
+
+
+    <item android:title="Others">
+        <menu>
+            <!--            <item-->
+            <!--                android:id="@+id/nav_darkmode_id"-->
+            <!--                android:title="Dark Mode"-->
+            <!--                android:icon="@drawable/ic_brightness_3_black_24dp"-->
+            <!--                app:actionLayout="@layout/nav_drawer_darkmode_switch"-->
+            <!--                />-->
+            <item
+                android:id="@+id/nav_logout_id"
+                android:title="Logout" />
+        </menu>
+    </item>
+
+</menu>

@@ -9,10 +9,17 @@ public class Place {
     public float rating;
 
 
-    @NonNull
     @Override
     public String toString() {
-        return name;
+        return "Place{" +
+                "address='" + address + '\'' +
+                ", phone_no='" + phone_no + '\'' +
+                ", distance='" + distance + '\'' +
+                ", name='" + name + '\'' +
+                ", photourl='" + photourl + '\'' +
+                ", placeid='" + placeid + '\'' +
+                ", rating=" + rating +
+                '}';
     }
 
     public Place(String address, String phone_no, float rating, String distance, String name, String photurl, String placeid)

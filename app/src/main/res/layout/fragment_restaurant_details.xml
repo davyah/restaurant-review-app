@@ -272,8 +272,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingLeft="13.4dp"
-                        android:paddingTop="25dp">
+                        android:padding="13.4dp">
 
                         <com.example.user.restaurantreviewapp.customfonts.MyTextView_Roboto_Regular
                             android:layout_width="wrap_content"
@@ -283,156 +282,18 @@
                             android:textColor="#c2c4ca"
                             android:textSize="14.4sp" />
 
-                        <com.example.user.restaurantreviewapp.customfonts.MyTextView_Roboto_Regular
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="15dp"
-                            android:text="See all reviews"
-                            android:textColor="#d22532"
-                            android:textSize="14.4sp" />
-
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:paddingTop="12dp"
-                        android:paddingBottom="12dp">
+                        android:layout_height="wrap_content">
 
-                        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:layout_width="38.4dp"
-                            android:layout_height="38.4dp"
-                            android:layout_marginLeft="13.4dp"
-                            android:layout_marginTop="17dp"
-                            android:layout_marginRight="5.4dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/khilji"
-                            app:civ_border_width="30dp" />
 
-                        <LinearLayout
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/googleReviews_rcv"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15.4dp"
-                            android:layout_marginTop="12.8dp"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:text="Ellen McLaughlin"
-                                    android:textColor="#4a4a4a"
-                                    android:textSize="14.4sp" />
-
-                                <RatingBar
-                                    style="?android:attr/ratingBarStyleSmall"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="18.2dp"
-                                    android:progressTint="#f05421"
-                                    android:rating="4" />
-
-                            </LinearLayout>
-
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:text="2 hours ago"
-                                android:textColor="#9b9b9b"
-                                android:textSize="14.4sp" />
-
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginTop="13.5dp"
-                                android:text="So we needed up ordering the deep fried salmon roll with Chinese hot mustard and wasabi noodles with salmon."
-                                android:textColor="#4a4a4a"
-                                android:textSize="14.4sp" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:paddingTop="12dp"
-                        android:paddingBottom="30dp">
-
-                        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:layout_width="38.4dp"
-                            android:layout_height="38.4dp"
-                            android:layout_marginLeft="13.4dp"
-                            android:layout_marginTop="17dp"
-                            android:layout_marginRight="5.4dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/khilji"
-                            app:civ_border_width="30dp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15.4dp"
-                            android:layout_marginTop="12.8dp"
-                            android:layout_marginBottom="10dp"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:text="Vincent King"
-                                    android:textColor="#4a4a4a"
-                                    android:textSize="14.4sp" />
-
-                                <RatingBar
-                                    style="?android:attr/ratingBarStyleSmall"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="18.2dp"
-                                    android:progressTint="#f05421"
-                                    android:rating="4" />
-
-                            </LinearLayout>
-
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:text="3 hours ago"
-                                android:textColor="#9b9b9b"
-                                android:textSize="14.4sp" />
-
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginTop="13.5dp"
-                                android:layout_marginBottom="10dp"
-                                android:text="So we needed up ordering the deep fried salmon roll with Chinese hot mustard and wasabi noodles with salmon."
-                                android:textColor="#4a4a4a"
-                                android:textSize="14.4sp" />
-
-                        </LinearLayout>
+                            android:layout_height="wrap_content" />
 
                     </LinearLayout>
 

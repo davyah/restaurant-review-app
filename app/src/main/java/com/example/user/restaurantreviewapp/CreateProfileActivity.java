@@ -32,7 +32,6 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CreateProfileActivity extends AppCompatActivity {
-    //TODO change storage location to unique
     @BindView(R.id.pick_image)
     CircleImageView profileImage;
 
@@ -93,6 +92,7 @@ public class CreateProfileActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         user = dataSnapshot.getValue(User.class);
                         if(user!=null) {
+                            user.setUserID(firebaseUser.getUid());
                             user.setName(nameEditText.getText().toString().trim());
                             user.setUsername(userNameEditText.getText().toString().trim());
                             if (imageUrl != null) {
@@ -110,6 +110,7 @@ public class CreateProfileActivity extends AppCompatActivity {
                             user.setEmail(firebaseUser.getEmail());
                             user.setName(nameEditText.getText().toString().trim());
                             user.setUsername(userNameEditText.getText().toString().trim());
+                            user.setUserID(firebaseUser.getUid());
                             if (imageUrl != null) {
                                 user.setImage_url(imageUrl);
                             }

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -23,29 +22,28 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.user.restaurantreviewapp.adapter.GoogleReviewsAdapter;
 import com.example.user.restaurantreviewapp.adapter.MealListAdapter;
 import com.example.user.restaurantreviewapp.adapter.ViewPagerAdapter;
 import com.example.user.restaurantreviewapp.customfonts.MyTextView_Roboto_Regular;
-import com.example.user.restaurantreviewapp.helper.MenuLoader;
+import com.example.user.restaurantreviewapp.helper.ContentLoader;
+import com.example.user.restaurantreviewapp.helper.RestaurantLoader;
 import com.example.user.restaurantreviewapp.model.Dish;
 import com.example.user.restaurantreviewapp.model.RestaurantDetails;
-import com.example.user.restaurantreviewapp.placesApi.ApiClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import org.apache.commons.io.IOUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.net.URL;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -82,12 +80,16 @@ public class RestaurantDetailsFragment extends Fragment {
     @BindView(R.id.navigateImageView)
     ImageView naviImageView;
 
+    @BindView(R.id.googleReviews_rcv)
+    RecyclerView googleReviewsRCV;
+
     ViewPagerAdapter viewPagerAdapter;
     RestaurantDetails restaurantDetails;
     DatabaseReference myRef;
     String userID;
     String placeID;
 
+    GoogleReviewsAdapter googleReviewsAdapter;
 
 
     MealListAdapter dishesAdapter;
@@ -96,7 +98,7 @@ public class RestaurantDetailsFragment extends Fragment {
 
     private FirebaseAuth mAuth;
     private FirebaseUser user;
-    Gson gson;
+    Gson gson = new Gson();
     String url;
 
     MainActivity activity;
@@ -110,53 +112,21 @@ public class RestaurantDetailsFragment extends Fragment {
     }
 
 
-
-    public class fetchStore extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... urls) {
-            try {
-                String result = IOUtils.toString(new URL(url), "UTF-8");
-                return result;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.N)
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if(s != null)
-            {
-                try {
-                    JSONObject jsonObject = new JSONObject(s);
-                    restaurantDetails = gson.fromJson(jsonObject.getString("result"), RestaurantDetails.class);
-                    resName.setText(restaurantDetails.getName());
-                    resAddress.setText(restaurantDetails.getFormatted_address());
-                    ratingBar.setRating(restaurantDetails.getRating());
-                    reviewsNum.setText(Integer.toString(restaurantDetails.getUser_ratings_total()) + " reviews");
-                    hours.setText(whatTheDay());
-                    viewPagerAdapter = new ViewPagerAdapter(activity, restaurantDetails.PhotosUrl());
-                    viewPager.setAdapter(viewPagerAdapter);
-                    loadMenuIfExists();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            else{
-
-            }
-        }
-    }
-
     private void loadMenuIfExists() {
-        new MenuLoader().loadMenu(myRef, placeID).setListener(new MenuLoader.MenuLoaderListener() {
+        Query query = myRef.child("meals").orderByChild("placeID").equalTo(placeID);
+        new ContentLoader().loadData(query).setListener(new ContentLoader.ContentLoaderListener() {
             @Override
-            public void onSuccess(ArrayList<Dish> menu) {
+            public void onSuccess(String json) {
 
-                dishesAdapter = new MealListAdapter(activity, menu);
+                ArrayList<Dish> menu = new ArrayList<>();
+                Type hashmapType = new TypeToken<HashMap<String, Dish>>() {
+                }.getType();
+
+                HashMap<String, Dish> menuMap = gson.fromJson(json, hashmapType);
+
+                menu.addAll(menuMap.values());
+
+                dishesAdapter = new MealListAdapter(activity, menu, myRef, '$');
                 dishList.setAdapter(dishesAdapter);
                 System.out.println("we are in rdf: " + menu);
                 dishesAdapter.setClickListener(new MealListAdapter.onClickListener() {
@@ -164,7 +134,7 @@ public class RestaurantDetailsFragment extends Fragment {
                                                    public void OnClick(int position) {
 
                                                        Bundle bundle = new Bundle();
-                                                       bundle.putString("mealID", menu.get(position).getDishID());
+                                                       bundle.putString("dish", gson.toJson(menu.get(position)));
                                                        activity.replaceFragments(MealDetailsFragment.class, bundle);
                                                    }
                                                }
@@ -176,48 +146,6 @@ public class RestaurantDetailsFragment extends Fragment {
                 noMenuError.setText(message);
             }
         });
-//        Query query = myRef.child("meals").orderByChild("placeID").equalTo(placeID);
-//        query.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                if(dataSnapshot.exists()){
-//                    Log.w("datasnapshot",dataSnapshot.getValue().toString());
-//
-//                    String json = gson.toJson(dataSnapshot.getValue());
-//                    Log.w("json",json);
-//
-//                    ArrayList<Dish> menu = new ArrayList<>();
-//                    Type hashmapType = new TypeToken<HashMap<String, Dish>>(){}.getType();
-//
-//                    HashMap<String, Dish> menuMap = gson.fromJson(json, hashmapType);
-//                    for (String key: menuMap.keySet()
-//                         ) {
-//                        System.out.println(menuMap.get(key));
-//                        menu.add(menuMap.get(key));
-//                    }
-//
-//                    dishesAdapter = new MealListAdapter(activity, menu);
-//                    dishList.setAdapter(dishesAdapter);
-//                    dishesAdapter.setClickListener(new MealListAdapter.onClickListener() {
-//                        @Override
-//                        public void OnClick(int position) {
-//
-//                            Bundle bundle = new Bundle();
-//                            bundle.putString("mealID", menu.get(position).getDishID());
-//                            activity.replaceFragments(MealDetailsFragment.class, bundle);
-//                        }
-//                    }
-//                );
-//                }else {
-//                    //the menu does not exist in firebase
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -271,12 +199,12 @@ public class RestaurantDetailsFragment extends Fragment {
             String json = gson.toJson(restaurantDetails);
             Bundle args = new Bundle();
             args.putString("restaurant", json);
-            args.putString("userID", userID);
             activity.replaceFragments(AddMealFragment.class, args);
         });
 
         dishList.setLayoutManager(new LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false));
 
+        googleReviewsRCV.setLayoutManager(new LinearLayoutManager(activity, RecyclerView.VERTICAL, false));;
         activity.findViewById(R.id.callButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -308,11 +236,32 @@ public class RestaurantDetailsFragment extends Fragment {
 
     public void loadData() {
         if (placeID != null) {
-            url = "https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=" + ApiClient.GOOGLE_PLACE_API_KEY;
-            Log.i("url", url);
-            gson = new Gson();
-            fetchStore task = new fetchStore();
-            task.execute(url);
+            Log.w("fetch place", placeID);
+            new RestaurantLoader().loadRestaurant(placeID).setListener(new RestaurantLoader.RestaurantLoaderListener() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                public void onSuccess(RestaurantDetails place) {
+                    Log.w("render place", place.getFormatted_address());
+                    restaurantDetails = place;
+                    resName.setText(restaurantDetails.getName());
+                    resAddress.setText(restaurantDetails.getFormatted_address());
+                    ratingBar.setRating(restaurantDetails.getRating());
+                    reviewsNum.setText(Integer.toString(restaurantDetails.getUser_ratings_total()) + " reviews");
+                    hours.setText(whatTheDay());
+                    viewPagerAdapter = new ViewPagerAdapter(activity, restaurantDetails.PhotosUrl());
+                    viewPager.setAdapter(viewPagerAdapter);
+
+                    //load google reviews
+                    googleReviewsAdapter = new GoogleReviewsAdapter(place.getGoogleReviews(), activity);
+                    googleReviewsRCV.setAdapter(googleReviewsAdapter);
+                    loadMenuIfExists();
+                }
+
+                @Override
+                public void onFailure(String message) {
+
+                }
+            });
         } else {
             Toast.makeText(activity, "some error occurred while getting information", Toast.LENGTH_SHORT).show();
            activity.getSupportFragmentManager().popBackStackImmediate();

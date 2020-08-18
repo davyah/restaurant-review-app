@@ -13,84 +13,45 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 public class PlaceProvider {
     private APIInterface apiService;
     private PlaceProviderListener listener;
-    public PlaceProvider(String placeType, String latLngString, long radius) {
-        apiService = ApiClient.getClient().create(APIInterface.class);
-        fetchPlaces(placeType, latLngString, radius);
 
+    String placeType, latLngString, queryString;
+    long radius;
+
+    public PlaceProvider(String placeType, String latLngString, long radius) {
+        this.placeType = placeType;
+        this.latLngString = latLngString;
+        this.radius = radius;
+        apiService = ApiClient.getClient().create(APIInterface.class);
+        fetchPlaces();
     }
+
+    public PlaceProvider(String placeType, String latLanString, long radius, String queryString)
+    {
+        this.queryString = queryString;
+        this.placeType = placeType;
+        this.latLngString = latLanString;
+        this.radius = radius;
+        apiService = ApiClient.getClient().create(APIInterface.class);
+        searchPlaces();
+    }
+
     public void setPlaceProviderListener(PlaceProviderListener providerListener){
         this.listener = providerListener;
     }
-    private void fetchPlaces(String placeType, String latLngString, long radius) {
+
+    private void fetchPlaces() {
         Call<PlacesResponse.Root> call = apiService.doPlaces(latLngString, radius, placeType, ApiClient.GOOGLE_PLACE_API_KEY);
-        call.enqueue(new Callback<PlacesResponse.Root>() {
-            @Override
-            public void onResponse(Call<PlacesResponse.Root> call, Response<PlacesResponse.Root> response) {
-                PlacesResponse.Root root = (PlacesResponse.Root) response.body();
-
-                if (response.isSuccessful()) {
-
-                    switch (root.status) {
-                        case "OK":
-
-                            ArrayList<PlacesResponse.CustomA>results = root.customA;
-
-
-                            String photourl;
-                            Log.i(TAG, "fetch stores");
-
-
-                            for (int i = 0; i < results.size(); i++) {
-
-                                PlacesResponse.CustomA info = (PlacesResponse.CustomA) results.get(i);
-
-                                String place_id = results.get(i).place_id;
-
-
-                                if (results.get(i).photos != null) {
-
-                                    String photo_reference = results.get(i).photos.get(0).photo_reference;
-
-                                    photourl = ApiClient.base_url + "place/photo?maxwidth=100&photoreference=" + photo_reference +
-                                            "&key=" + ApiClient.GOOGLE_PLACE_API_KEY;
-
-                                } else {
-                                    photourl = "NA";
-                                }
-
-                                fetchDistance(info, place_id, photourl,latLngString);
-
-
-                                Log.i("Coordinates  ", info.geometry.locationA.lat + " , " + info.geometry.locationA.lng);
-                                Log.i("Names  ", info.name);
-
-                            }
-
-                            break;
-                        case "ZERO_RESULTS":
-                            if(listener!=null)listener.onError("ZERO RESULTS");
-                            break;
-                        case "OVER_QUERY_LIMIT":
-                            if(listener!=null)listener.onError("OVER_QUERY_LIMIT");
-                            break;
-                        default:
-                            if(listener!=null)listener.onError("ERROR");
-                            break;
-                    }
-
-                } else if (response.code() != 200) {
-                    if(listener!=null)listener.onError("Error " + response.code() + " found.");
-
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<PlacesResponse.Root> call, Throwable t) {
-
-            }
-        });
+        call.enqueue(callback);
     }
+
+
+    private void searchPlaces()
+    {
+        Call<PlacesResponse.Root> call = apiService.searchPlaces(queryString, latLngString, radius, placeType, ApiClient.GOOGLE_PLACE_API_KEY);
+        call.enqueue(callback);
+    }
+
+
     private void fetchDistance(final PlacesResponse.CustomA info, final String place_id, final String photourl,String latLngString) {
 
         Log.i(TAG,"Distance API call start");
@@ -105,7 +66,7 @@ public class PlaceProvider {
 
                 if (response.isSuccessful()) {
 
-                    Log.i(TAG, resultDistance.status);
+//                    Log.i(TAG, resultDistance.status);
 
                     if ("OK".equalsIgnoreCase(resultDistance.status)) {
                         DistanceResponse.InfoDistance row1 = resultDistance.rows.get(0);
@@ -168,8 +129,74 @@ public class PlaceProvider {
                 call.cancel();
             }
         });
-
     }
+
+    Callback<PlacesResponse.Root> callback = new Callback<PlacesResponse.Root>() {
+        @Override
+        public void onResponse(Call<PlacesResponse.Root> call, Response<PlacesResponse.Root> response) {
+            PlacesResponse.Root root = (PlacesResponse.Root) response.body();
+
+            if (response.isSuccessful()) {
+
+                switch (root.status) {
+                    case "OK":
+
+                        ArrayList<PlacesResponse.CustomA>results = root.customA;
+
+
+                        String photourl;
+
+                        for (int i = 0; i < results.size(); i++) {
+
+                            PlacesResponse.CustomA info = (PlacesResponse.CustomA) results.get(i);
+
+                            String place_id = results.get(i).place_id;
+
+
+                            if (results.get(i).photos != null) {
+
+                                String photo_reference = results.get(i).photos.get(0).photo_reference;
+
+                                photourl = ApiClient.base_url + "place/photo?maxwidth=100&photoreference=" + photo_reference +
+                                        "&key=" + ApiClient.GOOGLE_PLACE_API_KEY;
+
+                            } else {
+                                photourl = "NA";
+                            }
+
+                            fetchDistance(info, place_id, photourl,latLngString);
+
+
+//                            Log.i("Coordinates  ", info.geometry.locationA.lat + " , " + info.geometry.locationA.lng);
+//                            Log.i("Names  ", info.name);
+
+                        }
+
+                        break;
+                    case "ZERO_RESULTS":
+                        if(listener!=null)listener.onError("ZERO RESULTS");
+                        break;
+                    case "OVER_QUERY_LIMIT":
+                        if(listener!=null)listener.onError("OVER_QUERY_LIMIT");
+                        break;
+                    default:
+                        if(listener!=null)listener.onError("ERROR");
+                        break;
+                }
+
+            } else if (response.code() != 200) {
+                if(listener!=null)listener.onError("Error " + response.code() + " found.");
+
+            }
+
+        }
+
+        @Override
+        public void onFailure(Call<PlacesResponse.Root> call, Throwable t) {
+
+        }
+    };
+
     public interface PlaceProviderListener{
         void onError(String msg);
         void onPlaceFetched(Place place);

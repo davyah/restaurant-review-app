@@ -64,7 +64,7 @@ public class LocationProvider implements GoogleApiClient.ConnectionCallbacks, Go
     }
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Log.i("google api client","coonected");
+        Log.i("google api client","connected");
             getLastLocation();
 
     }

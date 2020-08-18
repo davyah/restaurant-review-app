@@ -1,12 +1,16 @@
 package com.example.user.restaurantreviewapp.model;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
+import me.xdrop.fuzzywuzzy.FuzzySearch;
+
 public class Dish {
-    @SerializedName("rating")
-    private float rating;
+//    @SerializedName("rating")
+//    private float rating;
     @SerializedName("title")
     private String title;
     @SerializedName("description")
@@ -49,13 +53,13 @@ public class Dish {
         this.authorID = authorID;
     }
 
-    public float getRating() {
-        return rating;
-    }
-
-    public void setRating(float rating) {
-        this.rating = rating;
-    }
+//    public float getRating() {
+//        return rating;
+//    }
+//
+//    public void setRating(float rating) {
+//        this.rating = rating;
+//    }
 
     public String getTitle() {
         return title;
@@ -65,8 +69,8 @@ public class Dish {
         this.title = title;
     }
 
-    public String getPrice() {
-        return String.valueOf(price);
+    public Float getPrice() {
+        return price;
     }
 
     public void setPrice(float price) {
@@ -114,8 +118,7 @@ public class Dish {
     @Override
     public String toString() {
         return "Dish{" +
-                "rating=" + rating +
-                ", title='" + title + '\'' +
+                "title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +
                 ", photo_url=" + photo_url +
@@ -123,5 +126,10 @@ public class Dish {
                 ", authorID='" + authorID + '\'' +
                 ", dishID='" + dishID + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return FuzzySearch.ratio(this.getTitle(), ((Dish)obj).getTitle()) >= 85;
     }
 }

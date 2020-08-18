@@ -2,30 +2,39 @@ package com.example.user.restaurantreviewapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.asksira.bsimagepicker.BSImagePicker;
+import com.example.user.restaurantreviewapp.adapter.AutoSuggestAdapter;
 import com.example.user.restaurantreviewapp.adapter.ImagepickerAdapter;
 import com.example.user.restaurantreviewapp.customfonts.EditText_Roboto_Regular;
 import com.example.user.restaurantreviewapp.customfonts.MyTextView_Roboto_Regular;
+import com.example.user.restaurantreviewapp.helper.ContentLoader;
 import com.example.user.restaurantreviewapp.helper.ImageUploader;
 import com.example.user.restaurantreviewapp.model.Dish;
 import com.example.user.restaurantreviewapp.model.RestaurantDetails;
@@ -35,13 +44,18 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.fabiomsr.moneytextview.MoneyTextView;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -49,9 +63,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import in.madapps.placesautocomplete.PlaceAPI;
 import in.madapps.placesautocomplete.adapter.PlacesAutoCompleteAdapter;
-import in.madapps.placesautocomplete.listener.OnPlacesDetailsListener;
 import in.madapps.placesautocomplete.model.Place;
-import in.madapps.placesautocomplete.model.PlaceDetails;
+import me.xdrop.fuzzywuzzy.FuzzySearch;
 
 public class AddMealFragment extends Fragment implements BSImagePicker.OnSingleImageSelectedListener,
         BSImagePicker.OnMultiImageSelectedListener,
@@ -65,6 +78,7 @@ public class AddMealFragment extends Fragment implements BSImagePicker.OnSingleI
     private FirebaseAuth mAuth;
     // Write a message to the database
     FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference();
     DatabaseReference reviewRef = database.getReference("reviews");
     DatabaseReference mealsRef = database.getReference("meals");
 
@@ -77,13 +91,17 @@ public class AddMealFragment extends Fragment implements BSImagePicker.OnSingleI
 
     String placeID;
 
+    AlertDialog alertDialog;
+
     private ImagepickerAdapter adapter;
+
+    private AutoSuggestAdapter autoSuggestAdapter;
 
     @BindView(R.id.placeAutocompleteET)
     AutoCompleteTextView autoCompleteTextView;
 
     @BindView(R.id.meal_title)
-    EditText_Roboto_Regular title;
+    AppCompatAutoCompleteTextView title;
 
     @BindView(R.id.mealDescription)
     EditText_Roboto_Regular description;
@@ -99,6 +117,9 @@ public class AddMealFragment extends Fragment implements BSImagePicker.OnSingleI
 
     @BindView(R.id.reviewLayout)
     ConstraintLayout reviewLayout;
+
+    @BindView(R.id.reviewDescription)
+    EditText_Roboto_Regular reviewDescription;
 
     @BindView(R.id.ratingBar1)
     RatingBar ratingBar1;
@@ -120,6 +141,8 @@ public class AddMealFragment extends Fragment implements BSImagePicker.OnSingleI
 
     MainActivity activity;
 
+    ArrayList<Dish> menuList = new ArrayList<>();
+
 
     @Override
     public void onAttach(Context context) {
@@ -134,7 +157,7 @@ public class AddMealFragment extends Fragment implements BSImagePicker.OnSingleI
 
         imagesUrl.add(path);
         if (imagesUrl.size() == uris.size() - 1) {
-            Dish dish = new Dish(title.getText().toString(), description.getText().toString(), 100, imagesUrl, placeID, mealID, user.getUid(), currency);
+            Dish dish = new Dish(title.getText().toString(), description.getText().toString(), priceTextView.getAmount(), imagesUrl, placeID, mealID, user.getUid(), currency);
             //restaurantDetails.addDish(dish);
 
             mealsRef.child(dish.getDishID()).setValue(dish).
@@ -159,7 +182,15 @@ public class AddMealFragment extends Fragment implements BSImagePicker.OnSingleI
 
 
     public void submit(View view) {
-        //TODO check if no images chosen
+        if(!checkIfExist(title.getText().toString()))
+        {
+
+        }
+        else
+        {
+            //upload
+        }
+
         imagesUrl = new ArrayList<String>();
         mealID = UUID.randomUUID().toString();
         if (uris.size() == 1) {
@@ -175,7 +206,8 @@ public class AddMealFragment extends Fragment implements BSImagePicker.OnSingleI
 
         float totalRating = (float) (0.7 * ratingBar1.getRating() + 0.3 * ratingBar2.getRating());
         if (checkBox.isChecked()) {
-            review = new Review(title.getText().toString(), totalRating, null, user.getUid(), mealID, UUID.randomUUID().toString());
+            String currentTime = Calendar.getInstance().getTime().toString();
+            review = new Review(reviewDescription.getText().toString(), totalRating, null, UUID.randomUUID().toString(), user.getUid(), mealID, currentTime);
         }
 
 
@@ -195,6 +227,8 @@ public class AddMealFragment extends Fragment implements BSImagePicker.OnSingleI
         }
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -207,27 +241,24 @@ public class AddMealFragment extends Fragment implements BSImagePicker.OnSingleI
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        gson = new Gson();
-        String json = getArguments().getString("restaurant");
-
-//        myRef = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         user = mAuth.getCurrentUser();
         if (user == null) {
-            //TODO handle logged out situation
-//            startActivity(new Intent(RestaurantDetailsActivity.this, LoginActivity.class));
-//            finish();
+            startActivity(new Intent(activity, LoginActivity.class));
+            activity.finish();
         } else {
             userID = user.getUid();
         }
 
+        gson = new Gson();
+        String json = getArguments().getString("restaurant");
         restaurantDetails = gson.fromJson(json, RestaurantDetails.class);
 
         placeID = restaurantDetails.getPlace_id();
 
-        autoCompleteTextView.setText(restaurantDetails.getName());
+        autoCompleteTextView.setText(restaurantDetails.getName() + " " + restaurantDetails.getFormatted_address());
 
         PlaceAPI placeAPI = new PlaceAPI.Builder().apiKey(ApiClient.GOOGLE_PLACE_API_KEY).build(activity);
         PlacesAutoCompleteAdapter placesAutoCompleteAdapter = new PlacesAutoCompleteAdapter(activity, placeAPI);
@@ -236,32 +267,21 @@ public class AddMealFragment extends Fragment implements BSImagePicker.OnSingleI
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Place place = (Place) parent.getItemAtPosition(position);
-                placeAPI.fetchPlaceDetails(place.getId(), new OnPlacesDetailsListener() {
-                    @Override
-                    public void onPlaceDetailsFetched(PlaceDetails placeDetails) {
-                        Log.w("mdf actv place name", placeDetails.getName());
-                        placeID = placeDetails.getPlaceId();
-                        autoCompleteTextView.setText(placeDetails.getName());
-                    }
-
-                    @Override
-                    public void onError(String s) {
-                        activity.runOnUiThread(new Runnable() {
-                            public void run() {
-                                Toast.makeText(activity, s, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        activity.getSupportFragmentManager().popBackStackImmediate();
-                    }
-                });
+                Log.w("before fetching place",place.getDescription());
+                placeID = place.getId();
+                autoCompleteTextView.setText(place.getDescription());
+                loadMenu();
             }
         });
 
 
+
+        loadMenu();
+
+
         uris = new ArrayList<>();
         uris.add(null);
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
         imagesRCV.setLayoutManager(layoutManager);
         adapter = new ImagepickerAdapter(uris);
         imagesRCV.setAdapter(adapter);
@@ -278,7 +298,6 @@ public class AddMealFragment extends Fragment implements BSImagePicker.OnSingleI
                         .setOverSelectTextColor(R.color.error_text) //Default: #b71c1c. This is the color of the message shown when user tries to select more than maximum select count.
                         .disableOverSelectionMessage() //You can also decide not to show this over select message.
                         .build();
-//                FragmentManager fragmentManager = activity.getSupportFragmentManager();
                 multiSelectionPicker.show(getChildFragmentManager(), null);
             }
 
@@ -294,6 +313,7 @@ public class AddMealFragment extends Fragment implements BSImagePicker.OnSingleI
                 adapter.notifyDataSetChanged();
             }
         });
+
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -305,11 +325,7 @@ public class AddMealFragment extends Fragment implements BSImagePicker.OnSingleI
 
             @Override
             public void onClick(View v) {
-                if (checkBox.isChecked() == true) {
-                    reviewLayout.setVisibility(View.VISIBLE);
-                } else {
-                    reviewLayout.setVisibility(View.GONE);
-                }
+                hideAndShowReviewPanel();
             }
         });
 
@@ -317,9 +333,7 @@ public class AddMealFragment extends Fragment implements BSImagePicker.OnSingleI
             @Override
             public void onClick(View v) {
                 priceEditText.setVisibility(View.VISIBLE);
-                priceEditText.requestFocus();
-                InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(priceEditText, InputMethodManager.SHOW_IMPLICIT);
+                getFocus(priceEditText);
                 priceTextView.setVisibility(View.INVISIBLE);
             }
         });
@@ -341,6 +355,45 @@ public class AddMealFragment extends Fragment implements BSImagePicker.OnSingleI
         });
 
     }
+
+    private void loadMenu()
+    {
+        Query query = myRef.child("meals").orderByChild("placeID").equalTo(placeID);
+        new ContentLoader().loadData(query).setListener(new ContentLoader.ContentLoaderListener() {
+            @Override
+            public void onSuccess(String json) {
+
+                Type hashmapType = new TypeToken<HashMap<String, Dish>>() {}.getType();
+
+                HashMap<String, Dish> menuMap = gson.fromJson(json, hashmapType);
+
+                menuList.addAll(menuMap.values());
+
+                autoSuggestAdapter = new AutoSuggestAdapter(activity, menuList);
+                title.setAdapter(autoSuggestAdapter);
+
+                autoSuggestAdapter.setOnClickListener(new AutoSuggestAdapter.onClickListener() {
+                    @Override
+                    public void OnClick(Dish dish) {
+
+                        title.setText(dish.getTitle());
+                        description.setText(dish.getDescription());
+                        priceTextView.setAmount(dish.getPrice());
+                        checkBox.setChecked(true);
+                        title.dismissDropDown();
+                        hideAndShowReviewPanel();
+                        getFocus(reviewDescription);
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(String message) {
+
+            }
+        });
+    }
+
 
     @Override
     public void loadImage(Uri imageUri, ImageView ivImage) {
@@ -364,4 +417,30 @@ public class AddMealFragment extends Fragment implements BSImagePicker.OnSingleI
 
     }
 
+    public void hideAndShowReviewPanel()
+    {
+        if (checkBox.isChecked() == true) {
+            reviewLayout.setVisibility(View.VISIBLE);
+        } else {
+            reviewLayout.setVisibility(View.GONE);
+        }
+    }
+
+
+    private void getFocus(View v)
+    {
+        v.requestFocus();
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    public boolean checkIfExist(String dishTitle)
+    {
+        for (Dish dish: menuList) {
+
+            if(FuzzySearch.ratio(dish.getTitle(), dishTitle) >= 90)
+                return true;
+        }
+        return false;
+    }
 }

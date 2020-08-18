@@ -31,11 +31,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.example.user.restaurantreviewapp.customfonts.EditText_Roboto_Regular
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                 android:id="@+id/meal_title"
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
-
+                android:completionThreshold="1"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="50dp"
                 android:layout_marginEnd="20dp"
@@ -142,7 +142,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textView3">
 
-                <EditText
+                <com.example.user.restaurantreviewapp.customfonts.EditText_Roboto_Regular
                     android:id="@+id/reviewDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -3,6 +3,7 @@ package com.example.user.restaurantreviewapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -50,8 +52,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private User user;
     public static final String PREFS_FILE_NAME = "sharedPreferences";
-
-
 
 
     @BindView(R.id.toolbar)
@@ -109,6 +109,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.search_bar);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setQueryHint("search");
+
+
+//        searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Place place = (Place) parent.getItemAtPosition(position);
+//                Log.w("before fetching place",place.getDescription());
+//                searchView.setText(place.getDescription());
+//            }
+//        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Bundle bundle = new Bundle();
+                bundle.putString("queryText", query);
+                replaceFragments(SearchResultsFragment.class, bundle);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
+
     /**
      * Initialize all widgets
      */
@@ -154,12 +191,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onBackPressed() {
         //Checks if the navigation drawer is open -- If so, close it
+        Log.w("stack",String.valueOf(getSupportFragmentManager().getBackStackEntryCount()));
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         }
         // If drawer is already close -- Do not override original functionality
         else {
-            super.onBackPressed();
+            if(getSupportFragmentManager().getBackStackEntryCount() == 1) {
+                finish();
+            }else {
+                super.onBackPressed();
+            }
+
         }
     }
 
@@ -247,6 +290,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void replaceFragments(Class fragmentClass, Bundle args) {
+        System.out.println("stack " + getSupportFragmentManager().getBackStackEntryCount());
         Fragment fragment = null;
         try {
             fragment = (Fragment) fragmentClass.newInstance();
@@ -259,5 +303,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragment.setArguments(args);
         fragmentManager.beginTransaction().replace(R.id.framelayout_id, fragment).addToBackStack(null)
                 .commit();
+        System.out.println("stack " + getSupportFragmentManager().getBackStackEntryCount());
     }
+
 }

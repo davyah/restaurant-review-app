@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/reviewContainer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="right"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:orientation="horizontal"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/authorImageView"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginLeft="13.4dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginRight="5.4dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/khilji"
+        app:civ_border_width="30dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15.4dp"
+        android:layout_marginTop="12.8dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <TextView
+                android:id="@+id/authorNameTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Ellen McLaughlin"
+                android:textColor="#4a4a4a"
+                android:textSize="14.4sp" />
+
+            <RatingBar
+                android:id="@+id/reviewRatingBar"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:numStars="5"
+                android:progressTint="#f05421"
+                android:rating="4" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/timeStampTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:padding="4dp"
+            android:text="2 hours ago"
+            android:textColor="#9b9b9b"
+            android:textSize="14.4sp" />
+
+
+        <TextView
+            android:id="@+id/reviewDescriptionTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="13.5dp"
+            android:padding="4dp"
+            android:text="So we needed up ordering the deep fried salmon roll with Chinese hot mustard and wasabi noodles with salmon."
+            android:textColor="#4a4a4a"
+            android:textSize="14.4sp" />
+
+    </LinearLayout>
+</LinearLayout>

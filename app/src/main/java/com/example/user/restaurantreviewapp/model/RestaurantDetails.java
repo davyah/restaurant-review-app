@@ -9,9 +9,10 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
+//TODO check why if there is menu, the RCV is not rolling independently
 public class RestaurantDetails {
-    @SerializedName("menu")
-    private ArrayList<Dish> menu = new ArrayList<Dish>();
+    @SerializedName("reviews")
+    ArrayList<GoogleReview> googleReviews;
 
     @SerializedName("formatted_phone_number")
     private String formatted_phone_number;
@@ -40,16 +41,6 @@ public class RestaurantDetails {
     @SerializedName("photos")
     private ArrayList<Photo> photos = new ArrayList<Photo>();
 
-    public void addDish(Dish dish)
-    {
-        if(menu != null)
-            menu.add(dish);
-        else
-        {
-            menu = new ArrayList<Dish>();
-            menu.add(dish);
-        }
-    }
 
 
     public String getFormatted_phone_number() {
@@ -60,13 +51,6 @@ public class RestaurantDetails {
         return formatted_address;
     }
 
-    public ArrayList<Dish> getMenu() {
-        return menu;
-    }
-
-    public void setMenu(ArrayList<Dish> menu) {
-        this.menu = menu;
-    }
 
     public void setFormatted_phone_number(String formatted_phone_number) {
         this.formatted_phone_number = formatted_phone_number;
@@ -153,7 +137,15 @@ public class RestaurantDetails {
         return photosUrl;
     }
 
-    RestaurantDetails(String place_id, String formatted_phone_number, String name, String formatted_address, float rating, int user_ratings_total, Opening_hours opening_hours, ArrayList<Photo> photos, Geometry geometry, ArrayList<Dish> menu)
+    public ArrayList<GoogleReview> getGoogleReviews() {
+        return googleReviews;
+    }
+
+    public void setGoogleReviews(ArrayList<GoogleReview> googleReviews) {
+        this.googleReviews = googleReviews;
+    }
+
+    RestaurantDetails(String place_id, String formatted_phone_number, String name, String formatted_address, float rating, int user_ratings_total, Opening_hours opening_hours, ArrayList<Photo> photos, Geometry geometry, ArrayList<GoogleReview> googleReviews)
     {
         this.place_id = place_id;
         this.name = name;
@@ -164,6 +156,6 @@ public class RestaurantDetails {
         this.opening_hours = opening_hours;
         this.photos = photos;
         this.geometry = geometry;
-        this.menu = menu;
+        this.googleReviews = googleReviews;
     }
 }

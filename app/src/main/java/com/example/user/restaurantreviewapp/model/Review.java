@@ -5,8 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 
 public class Review {
-    @SerializedName("title")
-    private String title;
+    @SerializedName("description")
+    private String description;
 
     @SerializedName("rating")
     private float rating;
@@ -19,6 +19,26 @@ public class Review {
     private String authorID;
 
     private String dishID;
+
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    private String timeStamp;
+
+    public Review(String description, float rating, ArrayList<String> photosUrl, String reviewID, String authorID, String dishID, String timeStamp) {
+        this.description = description;
+        this.rating = rating;
+        this.photosUrl = photosUrl;
+        this.reviewID = reviewID;
+        this.authorID = authorID;
+        this.dishID = dishID;
+        this.timeStamp = timeStamp;
+    }
 
     public String getReviewID() {
         return reviewID;
@@ -44,21 +64,13 @@ public class Review {
         this.dishID = dishID;
     }
 
-    public Review(String title, float rating, ArrayList<String> photosUrl, String authorID, String dishID, String reviewID) {
-        this.title = title;
-        this.rating = rating;
-        this.photosUrl = photosUrl;
-        this.authorID = authorID;
-        this.dishID = dishID;
-        this.reviewID = reviewID;
+
+    public String getDescription() {
+        return description;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public float getRating() {
@@ -80,7 +92,7 @@ public class Review {
     @Override
     public String toString() {
         return "Review{" +
-                "title='" + title + '\'' +
+                "description='" + description + '\'' +
                 ", rating=" + rating +
                 ", photosUrl=" + photosUrl +
                 ", reviewID='" + reviewID + '\'' +

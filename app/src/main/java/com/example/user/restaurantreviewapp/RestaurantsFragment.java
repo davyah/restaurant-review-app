@@ -70,46 +70,6 @@ public class RestaurantsFragment extends Fragment {
 
     MainActivity activity;
 
-//    // TODO: Rename parameter arguments, choose names that match
-//    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-//    private static final String ARG_PARAM1 = "param1";
-//    private static final String ARG_PARAM2 = "param2";
-//
-//    // TODO: Rename and change types of parameters
-//    private String mParam1;
-//    private String mParam2;
-//
-//    public RestaurantsFragment() {
-//        // Required empty public constructor
-//    }
-//
-//    /**
-//     * Use this factory method to create a new instance of
-//     * this fragment using the provided parameters.
-//     *
-//     * @param param1 Parameter 1.
-//     * @param param2 Parameter 2.
-//     * @return A new instance of fragment MainFragment.
-//     */
-//    // TODO: Rename and change types and number of parameters
-//    public static RestaurantsFragment newInstance(String param1, String param2) {
-//        RestaurantsFragment fragment = new RestaurantsFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
-//
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
-//    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -130,7 +90,6 @@ public class RestaurantsFragment extends Fragment {
         shimmerRecycler.showShimmerAdapter();
         shimmerRecycler.setLayoutManager(new GridLayoutManager(activity,3));
 
-        Log.w("on create view", "we are here");
         return view;
     }
 
@@ -140,7 +99,7 @@ public class RestaurantsFragment extends Fragment {
         apiService = ApiClient.getClient().create(APIInterface.class);
         locationProvider = new LocationProvider(activity);
 
-        GridLayoutManager layoutManager = new GridLayoutManager(activity, 3);
+//        GridLayoutManager layoutManager = new GridLayoutManager(activity, 3);
         loadData();
     }
 
@@ -200,7 +159,6 @@ public class RestaurantsFragment extends Fragment {
                 Bundle args = new Bundle();
                 args.putString("placeid", restaurantsList.get(position).placeid);
                 activity.replaceFragments(RestaurantDetailsFragment.class, args);
-                //startActivity(new Intent(activity, RestaurantDetailsActivity.class).putExtra("placeid", restaurantsList.get(position).placeid));
             }
         });
 //        recyclerView.setAdapter(adapterStores);

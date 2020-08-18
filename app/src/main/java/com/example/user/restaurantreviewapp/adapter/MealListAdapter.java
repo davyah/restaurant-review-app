@@ -12,9 +12,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.user.restaurantreviewapp.R;
 import com.example.user.restaurantreviewapp.customfonts.MyTextView_Roboto_Regular;
+import com.example.user.restaurantreviewapp.helper.ContentLoader;
 import com.example.user.restaurantreviewapp.model.Dish;
+import com.example.user.restaurantreviewapp.model.Review;
+import com.google.firebase.database.DatabaseReference;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MyViewHolder> {
@@ -22,15 +30,20 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MyView
     private List<Dish> menu;
     private Context context;
     private MealListAdapter.onClickListener onClickListener;
+    DatabaseReference myRef;
+    char currencySymbol;
+    Gson gson = new Gson();
 
     public void setClickListener(MealListAdapter.onClickListener onClickListener){
         this.onClickListener = onClickListener;
     }
 
-    public MealListAdapter(Context context ,List<Dish> menu)
+    public MealListAdapter(Context context ,List<Dish> menu, DatabaseReference reference, char currencySymbol)
     {
         this.context = context;
         this.menu = menu;
+        this.myRef = reference;
+        this.currencySymbol = currencySymbol;
     }
 
 
@@ -64,8 +77,41 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MyView
                 .resize(512, 512).into(holder.meal_image);
 
 
-        holder.meal_price.setText(menu.get(position).getPrice());
-        holder.meal_rating.setRating(menu.get(position).getRating());
+        holder.meal_price.setText(String.valueOf(menu.get(position).getPrice()));
+
+        new ContentLoader().loadData(myRef.child("reviews").orderByChild("dishID").equalTo(menu.get(position).getDishID())).setListener(new ContentLoader.ContentLoaderListener() {
+            @Override
+            public void onSuccess(String json) {
+                ArrayList<Review> reviewsList = new ArrayList<>();
+                Type hashmapType = new TypeToken<HashMap<String, Review>>() {
+                }.getType();
+
+                HashMap<String, Review> reviewsMap = gson.fromJson(json, hashmapType);
+
+                float avg = 0;
+                reviewsList.addAll(reviewsMap.values());
+
+
+                if(reviewsList.size() > 0)
+                {
+                    for (Review review: reviewsList
+                    ) {
+                        avg += review.getRating();
+                    }
+                    avg = avg/reviewsList.size();
+
+                }
+                holder.meal_rating.setRating(avg);
+
+            }
+
+            @Override
+            public void onFailure(String message) {
+                holder.meal_rating.setRating(0);
+            }
+        });
+
+
 
     }
 

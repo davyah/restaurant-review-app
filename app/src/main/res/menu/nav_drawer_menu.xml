@@ -3,60 +3,42 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/places_menu"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_restaurants_id"
-            android:icon="@drawable/ic_publish_black_24dp"
-            android:title="restaurants" />
+            android:icon="@drawable/ic_baseline_restaurant_24"
+            android:title="@string/restaurants" />
         <item
             android:id="@+id/nav_map_id"
-            android:title="map" />
-        <!--        <item-->
-        <!--            android:id="@+id/nav_profile_id"-->
-        <!--            android:icon="@drawable/ic_person_black_24dp"-->
-        <!--            android:title="Profile" />-->
-        <!--        <item-->
-        <!--            android:id="@+id/nav_notebooks_id"-->
-        <!--            android:title="Notebooks"-->
-        <!--            android:icon="@drawable/ic_book_black_24dp"-->
-        <!--            />-->
+            android:icon="@drawable/ic_baseline_map_24"
+            android:title="@string/map" />
     </group>
 
-    <menu android:title="@string/account">
-        <group android:checkableBehavior="single">
-            <item
-                android:id="@+id/nav_favorites_id"
-                android:title="my favorites" />
-            <item
-                android:id="@+id/nav_reviews_id"
-                android:icon="@drawable/ic_publish_black_24dp"
-                android:title="my reviews" />
-            <item
-                android:id="@+id/nav_profile_id"
-                android:title="my profile" />
-            <!--            <item-->
-            <!--                android:id="@+id/nav_trash_id"-->
-            <!--                android:title="Trash"-->
-            <!--                android:icon="@drawable/ic_delete_black_24dp"-->
-            <!--                />-->
+    <group
+        android:id="@+id/account_menu"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_favorites_id"
+            android:icon="@drawable/ic_baseline_favorite_border_24"
+            android:title="@string/favorites" />
+        <item
+            android:id="@+id/nav_reviews_id"
+            android:icon="@drawable/ic_baseline_edit_24"
+            android:title="@string/my_reviews" />
+        <item
+            android:id="@+id/nav_profile_id"
+            android:icon="@drawable/ic_baseline_account_circle_24"
+            android:title="@string/my_profile" />
+    </group>
 
-        </group>
+    <group>
+        <item
+            android:id="@+id/nav_logout_id"
+            android:title="@string/logout"
+            />
+    </group>
 
-    </menu>
-
-
-    <item android:title="Others">
-        <menu>
-            <!--            <item-->
-            <!--                android:id="@+id/nav_darkmode_id"-->
-            <!--                android:title="Dark Mode"-->
-            <!--                android:icon="@drawable/ic_brightness_3_black_24dp"-->
-            <!--                app:actionLayout="@layout/nav_drawer_darkmode_switch"-->
-            <!--                />-->
-            <item
-                android:id="@+id/nav_logout_id"
-                android:title="Logout" />
-        </menu>
-    </item>
 
 </menu>

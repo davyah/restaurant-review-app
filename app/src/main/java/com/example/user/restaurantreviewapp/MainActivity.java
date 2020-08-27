@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -28,6 +29,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import net.time4j.android.ApplicationStarter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -62,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ApplicationStarter.initialize(this, true);
 
         initializeViews();
 
@@ -116,21 +123,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         MenuItem menuItem = menu.findItem(R.id.search_bar);
         SearchView searchView = (SearchView) menuItem.getActionView();
-        searchView.setQueryHint("search");
+        searchView.setQueryHint(this.getResources().getString(R.string.search));
 
-
-//        searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Place place = (Place) parent.getItemAtPosition(position);
-//                Log.w("before fetching place",place.getDescription());
-//                searchView.setText(place.getDescription());
-//            }
-//        });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                menuItem.collapseActionView();
+                searchView.clearFocus();
                 Bundle bundle = new Bundle();
                 bundle.putString("queryText", query);
                 replaceFragments(SearchResultsFragment.class, bundle);
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private void initializeViews(){
         toolbar = findViewById(R.id.toolbar_id);
-        toolbar.setTitle("restaurant review");
+        toolbar.setTitle(getResources().getString(R.string.app_title));
         setSupportActionBar(toolbar);
         drawerLayout = findViewById(R.id.drawer_layout_id);
         frameLayout = findViewById(R.id.framelayout_id);
@@ -201,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 finish();
             }else {
                 super.onBackPressed();
+
             }
 
         }
@@ -211,34 +212,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (menuItem.getItemId()){
             case R.id.nav_restaurants_id:
                 replaceFragments(RestaurantsFragment.class, new Bundle());
-//                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new RestaurantsFragment()).addToBackStack(null)
-//                        .commit();
+
                 closeDrawer();
                 break;
             case R.id.nav_favorites_id:
                 replaceFragments(MyFavoritesFragment.class, new Bundle());
-//                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new MyFavoritesFragment()).addToBackStack(null)
-//                        .commit();
+
                 closeDrawer();
                 break;
             case R.id.nav_reviews_id:
                 replaceFragments(MyReviewsFragment.class, new Bundle());
-//                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new MyReviewsFragment()).addToBackStack(null)
-//                        .commit();
+
                 closeDrawer();
                 break;
             case R.id.nav_profile_id:
                 replaceFragments(MyProfileFragment.class, new Bundle());
-//                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new MyProfileFragment()).addToBackStack(null)
-//                        .commit();
                 closeDrawer();
                 break;
-//            case R.id.nav_settings_id:
-//                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new SettingsFragment())
-//                        .commit();
-//                deSelectCheckedState();
-//                closeDrawer();
-//                break;
+
             case R.id.nav_logout_id:
                 if(mAuth!=null) {
                     mAuth.signOut();
@@ -251,23 +242,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         menuItem.setChecked(true);
         return true;
     }
-
-    /**
-     * Attach setOnCheckedChangeListener to the dark mode switch
-     */
-//    private void setDarkModeSwitchListener(){
-//        darkModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                if (!isChecked){
-//                    Toast.makeText(MainActivity.this, "Dark Mode Turn Off", Toast.LENGTH_SHORT).show();
-//                }
-//                else {
-//                    Toast.makeText(MainActivity.this, "Dark Mode Turn On", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-//    }
 
     /**
      * Checks if the navigation drawer is open - if so, close it
@@ -290,7 +264,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void replaceFragments(Class fragmentClass, Bundle args) {
-        System.out.println("stack " + getSupportFragmentManager().getBackStackEntryCount());
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        List<Fragment> fragments = fragmentManager.getFragments();
+
+        Log.w("stack count", String.valueOf(fragmentManager.getBackStackEntryCount()));
+        for (Fragment f: fragments) {
+            if(fragmentClass.isInstance(f))
+            {
+                fragmentClass.cast(f);
+                f.setArguments(args);
+                f.onResume();
+                fragmentManager.beginTransaction().replace(R.id.framelayout_id, f).commit();
+                Log.w("stack count", String.valueOf(fragmentManager.getBackStackEntryCount()));
+                return;
+            }
+        }
         Fragment fragment = null;
         try {
             fragment = (Fragment) fragmentClass.newInstance();
@@ -298,12 +287,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             e.printStackTrace();
         }
         // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
+
         assert fragment != null;
         fragment.setArguments(args);
         fragmentManager.beginTransaction().replace(R.id.framelayout_id, fragment).addToBackStack(null)
                 .commit();
-        System.out.println("stack " + getSupportFragmentManager().getBackStackEntryCount());
     }
 
 }

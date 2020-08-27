@@ -8,8 +8,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.asksira.bsimagepicker.BSImagePicker;
+import com.asksira.bsimagepicker.Utils;
 import com.example.user.restaurantreviewapp.customfonts.EditText_Roboto_Regular;
 import com.example.user.restaurantreviewapp.helper.ImageUploader;
 import com.example.user.restaurantreviewapp.model.User;
@@ -26,12 +29,17 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class CreateProfileActivity extends AppCompatActivity {
+public class CreateProfileActivity extends AppCompatActivity implements BSImagePicker.OnSingleImageSelectedListener,
+        BSImagePicker.OnMultiImageSelectedListener,
+        BSImagePicker.ImageLoaderDelegate,
+        BSImagePicker.OnSelectImageCancelledListener {
     @BindView(R.id.pick_image)
     CircleImageView profileImage;
 
@@ -139,10 +147,45 @@ public class CreateProfileActivity extends AppCompatActivity {
 
     }
     @OnClick(R.id.pick_image) void pickImage(){
-        ImagePicker.Companion.with(this)
-                .crop()	    			//Crop image(Optional), Check Customization for more option
-                .compress(1024)			//Final image size will be less than 1 MB(Optional)
-                .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
-                .start();
+
+        BSImagePicker singleSelectionPicker = new BSImagePicker.Builder("com.yourdomain.yourpackage.fileprovider")
+                .setMaximumDisplayingImages(24) //Default: Integer.MAX_VALUE. Don't worry about performance :)
+                .setSpanCount(3) //Default: 3. This is the number of columns
+                .setGridSpacing(Utils.dp2px(2)) //Default: 2dp. Remember to pass in a value in pixel.
+                .setPeekHeight(Utils.dp2px(360)) //Default: 360dp. This is the initial height of the dialog.
+                .hideCameraTile() //Default: show. Set this if you don't want user to take photo.
+//                .hideGalleryTile() //Default: show. Set this if you don't want to further let user select from a gallery app. In such case, I suggest you to set maximum displaying images to Integer.MAX_VALUE.
+                .setTag("A request ID") //Default: null. Set this if you need to identify which picker is calling back your fragment / activity.
+                .dontDismissOnSelect()
+                .build();
+
+        singleSelectionPicker.show(getSupportFragmentManager(), "picker");
+
+//        ImagePicker.Companion.with(this)
+//                .crop()	    			//Crop image(Optional), Check Customization for more option
+//                .compress(1024)			//Final image size will be less than 1 MB(Optional)
+//                .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+//                .start();
+    }
+
+    @Override
+    public void loadImage(Uri imageUri, ImageView ivImage) {
+        ivImage.setImageURI(imageUri);
+    }
+
+    @Override
+    public void onMultiImageSelected(List<Uri> uriList, String tag) {
+
+    }
+
+    @Override
+    public void onCancelled(boolean isMultiSelecting, String tag) {
+
+    }
+
+    @Override
+    public void onSingleImageSelected(Uri uri, String tag) {
+        profileImage.setImageURI(uri);
+        imageuri = uri;
     }
 }

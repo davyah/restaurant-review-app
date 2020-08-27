@@ -1,52 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="120dp"
-    android:layout_height="110dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="4dp"
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+    android:layout_margin="7dp"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="7dp"
     app:cardElevation="2dp">
 
-    <LinearLayout
-        android:layout_height="wrap_content"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        >
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/meal_img"
-            android:layout_width="60dp"
-            android:layout_height="60dp" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY" />
 
-        <RelativeLayout
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.2"
+            android:background="#000" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-            <com.example.user.restaurantreviewapp.customfonts.MyTextView_Roboto_Regular
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="4dp"
-                android:text="title"
-                android:layout_alignParentLeft="true"
-                android:id="@+id/meal_title"
-                />
-            <com.example.user.restaurantreviewapp.customfonts.MyTextView_Roboto_Regular
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="4dp"
-                android:layout_alignParentRight="true"
-                android:text="50 ils"
-                android:id="@+id/meal_price"
-                />
-        </RelativeLayout>
+            android:layout_alignParentBottom="true"
+            android:layout_margin="5dp"
+            android:orientation="vertical">
 
-        <RatingBar
-            android:id="@+id/meal_rating"
-            style="?android:attr/ratingBarStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:numStars="5"
-            android:progressTint="#f05421"
-            android:rating="4" />
-    </LinearLayout>
+            <com.example.user.restaurantreviewapp.customfonts.MyTextView_Roboto_Regular
+                android:id="@+id/meal_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_weight="1"
+                android:alpha="1"
+                android:gravity="start"
+                android:maxLength="15"
+                android:maxLines="1"
+                android:padding="4dp"
+                android:shadowColor="#000"
+                android:shadowDx="6"
+                android:shadowDy="6"
+                android:shadowRadius="6"
+                android:text="title"
+                android:textColor="#fff"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RatingBar
+                    android:id="@+id/meal_rating"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:alpha="1"
+                    android:numStars="5"
+                    android:progressTint="#fff"
+                    android:rating="4"
+                    android:shadowColor="#fff"
+                    android:shadowDx="6"
+                    android:shadowDy="6"
+                    android:shadowRadius="6" />
+
+
+                <com.example.user.restaurantreviewapp.customfonts.MyTextView_Roboto_Regular
+                    android:id="@+id/meal_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_weight="2"
+                    android:alpha="1"
+                    android:maxLines="1"
+                    android:paddingEnd="10dp"
+                    android:shadowColor="#000"
+                    android:shadowDx="6"
+                    android:shadowDy="6"
+                    android:shadowRadius="6"
+                    android:text="50 ils"
+                    android:textAlignment="viewEnd"
+                    android:textColor="#fff"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <!--    <RelativeLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent">-->
+
+    <!--        <ImageView-->
+    <!--            android:id="@+id/meal_img"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:scaleType="fitXY" />-->
+
+    <!--        <FrameLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:alpha="0.4"-->
+    <!--            android:background="#000">-->
+
+    <!--        </FrameLayout>-->
+
+    <!--        <LinearLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_alignParentBottom="true"-->
+    <!--            android:layout_margin="5dp"-->
+    <!--            android:orientation="vertical">-->
+
+    <!--            <LinearLayout-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="wrap_content">-->
+
+    <!--                <com.example.user.restaurantreviewapp.customfonts.MyTextView_Roboto_Regular-->
+    <!--                    android:id="@+id/meal_title"-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:layout_alignParentLeft="true"-->
+    <!--                    android:layout_weight="1"-->
+    <!--                    android:alpha="1"-->
+    <!--                    android:maxLength="15"-->
+    <!--                    android:maxLines="1"-->
+    <!--                    android:padding="4dp"-->
+    <!--                    android:shadowColor="#000"-->
+    <!--                    android:shadowDx="6"-->
+    <!--                    android:shadowDy="6"-->
+    <!--                    android:shadowRadius="6"-->
+    <!--                    android:text="title"-->
+    <!--                    android:textColor="#fff"-->
+    <!--                    android:textSize="18sp" />-->
+
+    <!--                <com.example.user.restaurantreviewapp.customfonts.MyTextView_Roboto_Regular-->
+    <!--                    android:id="@+id/meal_price"-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:layout_alignParentRight="true"-->
+    <!--                    android:layout_weight="2"-->
+    <!--                    android:alpha="1"-->
+    <!--                    android:maxLines="1"-->
+    <!--                    android:shadowColor="#000"-->
+    <!--                    android:shadowDx="6"-->
+    <!--                    android:shadowDy="6"-->
+    <!--                    android:shadowRadius="6"-->
+    <!--                    android:text="50 ils"-->
+    <!--                    android:textColor="#fff" />-->
+
+    <!--            </LinearLayout>-->
+
+    <!--            <RatingBar-->
+    <!--                android:id="@+id/meal_rating"-->
+    <!--                style="?android:attr/ratingBarStyleSmall"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:alpha="1"-->
+    <!--                android:numStars="5"-->
+    <!--                android:progressTint="#fff"-->
+    <!--                android:rating="4"-->
+    <!--                android:shadowColor="#fff"-->
+    <!--                android:shadowDx="6"-->
+    <!--                android:shadowDy="6"-->
+    <!--                android:shadowRadius="6" />-->
+
+    <!--        </LinearLayout>-->
+    <!--    </RelativeLayout>-->
+
+
 </androidx.cardview.widget.CardView>
+
+

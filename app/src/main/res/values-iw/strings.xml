@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="toolbar_title">דירוג מנות</string>
+    <string name="language">iw</string>
+    <string name="app_name">dish</string>
+    <string name="sign_up">הירשם</string>
+    <string name="create_account">צור חשבון</string>
+    <string name="password">סיסמה</string>
+    <string name="retype_pass">הקלד סיסמה שוב</string>
+    <string name="username">שם משתמש</string>
+    <string name="no_match">הסיסמאות אינן תואמות</string>
+    <string name="create_profile">צור פרופיל</string>
+    <string name="save">שמור</string>
+    <string name="name">שם</string>
+    <string name="email">אימייל</string>
+    <string name="login">כניסה</string>
+    <string name="dont_have_account">אין לך חשבון?</string>
+    <string name="email_error">כתובת אימייל לא תקינה</string>
+    <string name="short_password">סיסמה חייבת להכיל לפחות 6 תווים</string>
+    <string name="profile">my profile</string>
+    <string name="reviews">my reviews</string>
+    <string name="logout">צא</string>
+    <string name="openDrawer">Open drawer</string>
+    <string name="closeDrawer">Close drawer</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">בית</string>
+    <string name="menu_gallery">גלריה</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="account">חשבון</string>
+
+    <!--this strings are for the navigation drawer-->
+    <string name="restaurants">מסעדות</string>
+    <string name="map">מפה</string>
+    <string name="favorites">המועדפים שלי</string>
+    <string name="my_reviews">הביקורות שלי</string>
+    <string name="my_profile">הפרופיל שלי</string>
+
+    <string name="app_title">דירוג מנות</string>
+    <string name="contact">צור קשר</string>
+    <string name="open_in">שעות פתיחה</string>
+    <string name="menu_title">תפריט</string>
+    <string name="choose_place">בחר מסעדה</string>
+    <string name="dish_title">שם המנה</string>
+    <string name="dish_description">תיאור</string>
+    <string name="currency">₪</string>
+    <string name="review_checkbox">אני רוצה להוסיף ביקורת למנה זו</string>
+    <string name="add_picture">הוסף תמונה</string>
+    <string name="review_text_box">כתוב ביקורת</string>
+    <string name="edit_review">עריכה</string>
+    <string name="delete_review">מחיקה</string>
+    <string name="suggest_edit">הצע עריכה</string>
+    <string name="reviews_title">ביקורות</string>
+
+    <string name="deletion_alert">האם אתה בטוח?</string>
+    <string name="yes">כן</string>
+    <string name="no">לא</string>
+    <string name="cancel">בטל</string>
+    <string name="submit_anyawy">שמור בכל זאת</string>
+    <string name="deletion_success">הביקורת נמחקה בהצלחה</string>
+    <string name="restaurant_error">טעינת המסעדה נכשלה, נסה שוב מאוחר יותר</string>
+    <string name="dish_error">טעינת המנה נכשלה, אנא בחר באופן ידני</string>
+    <string name="restaurant_input">נא לבחור מסעדה</string>
+    <string name="title_input_error">נא להכניס שם המנה</string>
+    <string name="price_error">נא להכניס מחיר המנה</string>
+    <string name="missing_fields">נא למלא את כל השדות או לבחור לפחות תמונה אחת</string>
+    <string name="review_uploaded">הביקורת נשמרה בהצלחה</string>
+    <string name="new_dish_uploaded">מנה חדשה נוספה בהצלחה</string>
+    <string name="similar_dish_alert">שם המנה שהוספת דומה מאוד למנה קיימת, האם ברצונך לדרג את המנה הקיימת?</string>
+    <string name="error">אירעה שגיאה במהלך שמירת הנתונים, אנא נסה שנית מאוחר יותר</string>
+    <string name="already_reviewed">כבר דירגת מנה זאת בעבר, אנא בדוק תחת "הביקורות שלי"</string>
+    <string name="search">חיפוש</string>
+    <string name="edit_review_title">ערוך ביקורת</string>
+    <string name="forgot_password">שכחת סיסמה?</string>
+    <string name="email_sent">בדוק את תיבת האימייל שלך</string>
+    <string name="nearby">מסעדות קרובות אליך</string>
+    <string name="add_or_review">הוסף או דרג מנה</string>
+    <string name="results_title">תוצאות עבור %1$s</string>
+
+
+    <plurals name="reviews_num">
+        <item quantity="one">ביקורת אחת</item>
+        <item quantity="two">שתי ביקורות</item>
+        <item quantity="many">%s ביקורות</item>
+    </plurals>
+
+</resources>

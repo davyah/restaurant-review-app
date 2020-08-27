@@ -56,7 +56,8 @@ public class SignUpActivity extends AppCompatActivity {
                                 User user = new User();
                                 //TODO handle existing email address
                                 user.setEmail(task.getResult().getUser().getEmail());
-                                myRef.child("users").child(task.getResult().getUser().getUid()).setValue(user).addOnCompleteListener(task2 -> startActivity(new Intent(SignUpActivity.this,CreateProfileActivity.class)));
+                                myRef.child("users").child(task.getResult().getUser().getUid()).setValue(user).
+                                        addOnCompleteListener(task2 -> startActivity(new Intent(SignUpActivity.this,CreateProfileActivity.class)));
                             }
                         });
 
@@ -74,12 +75,12 @@ public class SignUpActivity extends AppCompatActivity {
         Matcher m = p.matcher(email);
         if(!m.matches())
         {
-            userEditText.setError("this is not an email adress!");
+            userEditText.setError(getResources().getString(R.string.email_error));
             return false;
         }
         else if(password.length()<=6)
         {
-            passwordEditText.setError(getString(R.string.too_short));
+            passwordEditText.setError(getResources().getString(R.string.short_password));
             return false;
         }
         else if(!password.equals(retype))

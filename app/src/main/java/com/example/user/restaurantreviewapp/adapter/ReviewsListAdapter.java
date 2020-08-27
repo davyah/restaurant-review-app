@@ -2,6 +2,7 @@ package com.example.user.restaurantreviewapp.adapter;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,13 @@ import com.google.firebase.database.Query;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import net.time4j.Moment;
+import net.time4j.PrettyTime;
+import net.time4j.format.expert.Iso8601Format;
+
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -70,6 +77,14 @@ public class ReviewsListAdapter extends RecyclerView.Adapter<ReviewsListAdapter.
 
         holder.reviewRatingBar.setRating(reviewsList.get(position).getRating());
         holder.reviewDescription.setText(reviewsList.get(position).getDescription());
+
+        try {
+            Moment moment = Iso8601Format.EXTENDED_DATE_TIME_OFFSET.parse(reviewsList.get(position).getTimeStamp());
+            String ago = PrettyTime.of(Locale.getDefault()).printRelativeInStdTimezone(moment);
+            holder.timeStamp.setText(ago);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

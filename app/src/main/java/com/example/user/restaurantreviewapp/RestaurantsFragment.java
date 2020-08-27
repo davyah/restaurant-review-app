@@ -11,7 +11,9 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
@@ -31,6 +33,7 @@ import com.example.user.restaurantreviewapp.placesApi.LocationProvider;
 import com.example.user.restaurantreviewapp.placesApi.Place;
 import com.example.user.restaurantreviewapp.placesApi.PlaceProvider;
 import com.example.user.restaurantreviewapp.placesApi.PlacesResponse;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -68,6 +71,9 @@ public class RestaurantsFragment extends Fragment {
     @BindView(R.id.shimmer_recycler_view)
     ShimmerRecyclerView shimmerRecycler;
 
+    @BindView(R.id.add_meal_or_review)
+    FloatingActionButton fab;
+
     MainActivity activity;
 
     @Override
@@ -98,11 +104,25 @@ public class RestaurantsFragment extends Fragment {
     {
         apiService = ApiClient.getClient().create(APIInterface.class);
         locationProvider = new LocationProvider(activity);
-
-//        GridLayoutManager layoutManager = new GridLayoutManager(activity, 3);
-        loadData();
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                activity.replaceFragments(AddOrReviewMealFragment.class, bundle);
+            }
+        });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void onResume() {
+        super.onResume();
+        System.out.println("we are in restaurant on resume");
+        Toolbar toolbar = activity.findViewById(R.id.toolbar_id);
+        toolbar.setTitle(getResources().getString(R.string.nearby));
+        restaurantsList = Collections.synchronizedList(new ArrayList<Place>());
+        loadData();
+    }
 
     private void loadData() {
         ConnectivityManager connectivityManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -117,8 +137,7 @@ public class RestaurantsFragment extends Fragment {
     }
 
     private void fetchStores(String placeType) {
-        restaurantsList = Collections.synchronizedList(new ArrayList<Place>());
-        PlaceProvider placeProvider = new PlaceProvider(placeType, latLngString, radius);
+        PlaceProvider placeProvider = new PlaceProvider(placeType, latLngString, radius, getResources().getString(R.string.language));
         placeProvider.setPlaceProviderListener(new PlaceProvider.PlaceProviderListener() {
             @Override
             public void onError(String msg) {
@@ -139,9 +158,9 @@ public class RestaurantsFragment extends Fragment {
      * @param place
      */
     private void addToList(Place place) {
-        restaurantsList.add(place);
+        if(!checkDuplicates(place.placeid))
+            restaurantsList.add(place);
 
-        //Log.i("details : ", info.name + "  " + address);
 
         Collections.sort(restaurantsList, new Comparator<Place>() {
             @Override
@@ -149,9 +168,6 @@ public class RestaurantsFragment extends Fragment {
                 return lhs.distance.compareTo(rhs.distance);
             }
         });
-        Log.w("add", place.address);
-        // progress.setVisibility(View.GONE);
-        Log.w("places", restaurantsList.toString());
         HomepageAdapter adapterStores = new HomepageAdapter(activity, restaurantsList, mAddressOutput);
         adapterStores.setOnClickListener(new HomepageAdapter.onClickListener() {
             @Override
@@ -161,9 +177,17 @@ public class RestaurantsFragment extends Fragment {
                 activity.replaceFragments(RestaurantDetailsFragment.class, args);
             }
         });
-//        recyclerView.setAdapter(adapterStores);
         shimmerRecycler.setAdapter(adapterStores);
+    }
 
+    private boolean checkDuplicates(String placeid)
+    {
+        for (Place p: restaurantsList
+             ) {
+            if(p.placeid.equals(placeid))
+                return true;
+        }
+        return false;
     }
 
 

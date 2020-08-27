@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="88dp"
-            android:layout_marginLeft="36.7dp"
+            android:layout_marginStart="36.7dp"
             android:orientation="horizontal">
 
             <com.example.user.restaurantreviewapp.customfonts.MyTextView_Roboto_Black
@@ -39,18 +39,19 @@
             android:background="#00000000"
             android:hint="@string/email"
             android:layout_marginTop="54.7dp"
-            android:layout_marginLeft="34.6dp"
-            android:layout_marginRight="33.6dp"
+            android:layout_marginStart="34.6dp"
+            android:layout_marginEnd="33.6dp"
             android:textColorHint="#ffffff"
             android:inputType="text"
             android:textColor="#ffffff"
-            android:textSize="14.4sp" />
+            android:textSize="14.4sp"
+            android:textAlignment="viewStart"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#33ffffff"
-            android:layout_marginLeft="34.6dp"
-            android:layout_marginRight="33.6dp"
+            android:layout_marginStart="34.6dp"
+            android:layout_marginEnd="33.6dp"
             android:layout_marginTop="6.5dp"/>
 
 
@@ -61,18 +62,19 @@
             android:background="#00000000"
             android:hint="@string/password"
             android:id="@+id/pass"
-            android:layout_marginLeft="34.6dp"
-            android:layout_marginRight="33.6dp"
+            android:layout_marginStart="34.6dp"
+            android:layout_marginEnd="33.6dp"
             android:textColorHint="#ffffff"
             android:inputType="textPassword"
             android:textColor="#ffffff"
-            android:textSize="14.4sp" />
+            android:textSize="14.4sp"
+            android:textAlignment="viewStart"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#33ffffff"
-            android:layout_marginLeft="34.6dp"
-            android:layout_marginRight="33.6dp"
+            android:layout_marginStart="34.6dp"
+            android:layout_marginEnd="33.6dp"
             android:layout_marginTop="6.5dp"/>
         <com.example.user.restaurantreviewapp.customfonts.EditText_Roboto_Regular
             android:layout_width="match_parent"
@@ -81,28 +83,29 @@
             android:background="#00000000"
             android:id="@+id/retype_pass"
             android:hint="@string/retype_pass"
-            android:layout_marginLeft="34.6dp"
-            android:layout_marginRight="33.6dp"
+            android:layout_marginStart="34.6dp"
+            android:layout_marginEnd="33.6dp"
             android:textColorHint="#ffffff"
             android:inputType="textPassword"
             android:textColor="#ffffff"
-            android:textSize="14.4sp" />
+            android:textSize="14.4sp"
+            android:textAlignment="viewStart"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#33ffffff"
-            android:layout_marginLeft="34.6dp"
-            android:layout_marginRight="33.6dp"
+            android:layout_marginStart="34.6dp"
+            android:layout_marginEnd="33.6dp"
             android:layout_marginTop="6.5dp"/>
 
         <com.example.user.restaurantreviewapp.customfonts.MyTextView_Roboto_Regular
+            android:id="@+id/btn_sign_up"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="34.6dp"
-            android:layout_marginRight="33.6dp"
+            android:layout_marginStart="34.6dp"
             android:layout_marginTop="53.8dp"
-            android:id="@+id/btn_sign_up"
-            android:background="@drawable/rectangle"
+            android:layout_marginEnd="33.6dp"
+            android:background="@drawable/round_corner"
             android:gravity="center_horizontal"
             android:padding="16.4dp"
             android:text="@string/sign_up"

@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.user.restaurantreviewapp.MyReviewsFragment;
 import com.example.user.restaurantreviewapp.R;
 import com.example.user.restaurantreviewapp.customfonts.MyTextView_Roboto_Regular;
 import com.example.user.restaurantreviewapp.helper.ContentLoader;
@@ -39,14 +40,24 @@ public class MyReviewsAdapter extends RecyclerView.Adapter<MyReviewsAdapter.MyVi
     DatabaseReference myRef;
     Gson gson = new Gson();
     RestaurantDetails restaurantDetails;
+    String language;
 
+    MyReviewsAdapter.onClickListener onClickListener;
 
+    public MyReviewsAdapter.onClickListener getOnClickListener() {
+        return onClickListener;
+    }
 
+    public void setOnClickListener(MyReviewsAdapter.onClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
 
-    public MyReviewsAdapter(ArrayList<Review> myReviews, Context context, DatabaseReference myRef) {
+    public MyReviewsAdapter(ArrayList<Review> myReviews, Context context, DatabaseReference myRef, onClickListener listener) {
         this.myReviews = myReviews;
         this.context = context;
         this.myRef = myRef;
+        this.language = context.getResources().getString(R.string.language);
+        this.onClickListener = listener;
     }
 
     @NonNull
@@ -66,7 +77,7 @@ public class MyReviewsAdapter extends RecyclerView.Adapter<MyReviewsAdapter.MyVi
             @Override
             public void onSuccess(String json) {
                 Dish dish = gson.fromJson(json, Dish.class);
-                new RestaurantLoader().loadRestaurant(dish.getPlaceID()).setListener(new RestaurantLoader.RestaurantLoaderListener() {
+                new RestaurantLoader().loadRestaurant(dish.getPlaceID(), context.getResources().getString(R.string.language)).setListener(new RestaurantLoader.RestaurantLoaderListener() {
                     @Override
                     public void onSuccess(RestaurantDetails place) {
                         holder.restaurantName.setText(place.getName());
@@ -101,9 +112,14 @@ public class MyReviewsAdapter extends RecyclerView.Adapter<MyReviewsAdapter.MyVi
                                 switch (item.getItemId()) {
                                     case R.id.editReview:
                                         Log.w("item selected", "edit review");
+                                        if(onClickListener != null)
+                                            onClickListener.OnEditClick(position);
                                         return true;
                                     case R.id.deleteReview:
-                                        Log.w("item selected", "delete review");                                        return true;
+                                        Log.w("item selected", "delete review");
+                                        if(onClickListener != null)
+                                            onClickListener.OnDeleteClick(position);
+                                        return true;
                                     default:
                                         return false;
                                 }
@@ -155,14 +171,10 @@ public class MyReviewsAdapter extends RecyclerView.Adapter<MyReviewsAdapter.MyVi
 
     }
 
-    private void getPlace(String placeID)
-    {
-
-
-    }
 
     public interface onClickListener{
-        void OnClick(Review myReview);
+        void OnDeleteClick(int position);
+        void OnEditClick(int position);
     }
 
 }

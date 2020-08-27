@@ -31,19 +31,19 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MyView
     private Context context;
     private MealListAdapter.onClickListener onClickListener;
     DatabaseReference myRef;
-    char currencySymbol;
+    String currencySymbol;
     Gson gson = new Gson();
 
     public void setClickListener(MealListAdapter.onClickListener onClickListener){
         this.onClickListener = onClickListener;
     }
 
-    public MealListAdapter(Context context ,List<Dish> menu, DatabaseReference reference, char currencySymbol)
+    public MealListAdapter(Context context ,List<Dish> menu, DatabaseReference reference)
     {
         this.context = context;
         this.menu = menu;
         this.myRef = reference;
-        this.currencySymbol = currencySymbol;
+        this.currencySymbol = context.getResources().getString(R.string.currency);
     }
 
 
@@ -73,11 +73,11 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MyView
         });
         holder.meal_title.setText(menu.get(position).getTitle());
         Log.w("link",menu.get(position).getPhoto_url().get(0));
-        Picasso.with(context).load(menu.get(position).getPhoto_url().get(0))
-                .resize(512, 512).into(holder.meal_image);
+        Picasso.with(context).load(menu.get(position).getPhoto_url().get(0)).centerCrop()
+                .resize(300, 450).into(holder.meal_image);
 
 
-        holder.meal_price.setText(String.valueOf(menu.get(position).getPrice()));
+        holder.meal_price.setText(currencySymbol+String.valueOf(menu.get(position).getPrice()));
 
         new ContentLoader().loadData(myRef.child("reviews").orderByChild("dishID").equalTo(menu.get(position).getDishID())).setListener(new ContentLoader.ContentLoaderListener() {
             @Override

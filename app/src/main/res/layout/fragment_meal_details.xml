@@ -17,7 +17,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ScrollView
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp">
@@ -86,9 +86,10 @@
                                     android:id="@+id/dishNameTV"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:inputType="textMultiLine"
+                                    android:layout_weight="3"
+                                    android:inputType="textMultiLine|textNoSuggestions"
                                     android:text="creamy pasta"
+                                    android:textAlignment="viewStart"
                                     android:textColor="#262628"
                                     android:textSize="24sp" />
 
@@ -97,13 +98,13 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_centerHorizontal="true"
-                                    android:layout_marginStart="3dp"
+
                                     android:layout_weight="1"
                                     android:singleLine="true"
                                     app:amount="0"
                                     app:baseTextColor="#000"
-                                    app:baseTextSize="40sp"
-                                    app:decimalDigitsTextSize="30sp"
+                                    app:baseTextSize="20sp"
+                                    app:decimalDigitsTextSize="17sp"
                                     app:decimalGravity="bottom"
                                     app:decimalMargin="6dp"
                                     app:decimalSeparator="."
@@ -112,7 +113,7 @@
                                     app:layout_constraintEnd_toEndOf="parent"
 
 
-                                    app:symbol="$"
+                                    app:symbol="@string/currency"
                                     app:symbolGravity="start|bottom"
                                     app:symbolMargin="6dp"
                                     app:symbolTextSize="20sp" />
@@ -123,7 +124,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
+                                android:inputType="textNoSuggestions|none"
                                 android:text="60 Kub Pines Apt. 797"
+                                android:textAlignment="viewStart"
                                 android:textColor="#101010"
                                 android:textSize="14.4sp" />
 
@@ -139,14 +142,14 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:numStars="5"
-                                    android:progressTint="#f05421"
+                                    android:progressTint="@color/rating_bar_color"
                                     android:rating="4" />
 
                                 <com.example.user.restaurantreviewapp.customfonts.MyTextView_Roboto_Regular
                                     android:id="@+id/ReviewsNumTV"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="8.4dp"
+                                    android:layout_marginStart="4dp"
                                     android:text="238 reviews"
                                     android:textColor="#9b9b9b"
                                     android:textSize="11.5sp" />
@@ -165,12 +168,12 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:layout_marginRight="15dp"
+                                    android:layout_marginEnd="15dp"
                                     android:background="@drawable/food5_contact__ract_edit"
                                     android:gravity="center"
-                                    android:paddingLeft="12dp"
+                                    android:paddingStart="12dp"
                                     android:paddingTop="8dp"
-                                    android:paddingRight="20dp"
+                                    android:paddingEnd="20dp"
                                     android:paddingBottom="8dp">
 
                                     <!--                                    <ImageView-->
@@ -183,13 +186,28 @@
                                     <com.example.user.restaurantreviewapp.customfonts.MyTextView_Roboto_Regular
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginLeft="5dp"
+                                        android:layout_marginStart="5dp"
                                         android:padding="1dp"
-                                        android:text="Suggest an edit "
+                                        android:text="@string/suggest_edit"
                                         android:textColor="#4a4a4a"
                                         android:textSize="14.4sp" />
 
                                 </LinearLayout>
+                                <RelativeLayout
+                                    android:id="@+id/icon_container"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+                                    <androidx.appcompat.widget.AppCompatImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginEnd="20dp"
+                                        android:src="@drawable/ic_baseline_favorite_border_24"
+                                        android:layout_alignParentEnd="true"
+                                        />
+                                </RelativeLayout>
+
+
+
                             </LinearLayout>
 
                         </LinearLayout>
@@ -224,7 +242,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Reviews"
+                            android:text="@string/reviews_title"
                             android:textColor="#131313"
                             android:textSize="20sp" />
 
@@ -239,7 +257,9 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/reviews_rcv"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+
+                            />
 
                     </LinearLayout>
 
@@ -253,16 +273,18 @@
 
                 </LinearLayout>
 
-            </ScrollView>
+            </androidx.core.widget.NestedScrollView>
         </LinearLayout>
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_meal"
+            android:id="@+id/add_review"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:src="@drawable/ic_baseline_add_24"
             />
     </RelativeLayout>
 

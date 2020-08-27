@@ -1,19 +1,21 @@
 <resources>
-    <string name="toolbar_title">Notes App</string>
-
-    <string name="app_name">user.navigationdrawersample</string>
+    <string name="toolbar_title">dishes reviews</string>
+    <string name="language">en</string>
+    <string name="app_name">dish</string>
     <string name="sign_up">SIGN UP</string>
     <string name="create_account">Create account</string>
     <string name="password">Password</string>
     <string name="retype_pass">Retype password</string>
     <string name="username">Username</string>
-    <string name="no_match">password must be at least 6 chars</string>
-    <string name="too_short">password is too short</string>
+    <string name="no_match">please enter the same password</string>
     <string name="create_profile">Create profile</string>
     <string name="save">SAVE</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
     <string name="login">LOGIN</string>
+    <string name="dont_have_account">don\'t have account?</string>
+    <string name="email_error">this is not an email address!</string>
+    <string name="short_password">password must be at least 6 characters</string>
     <string name="profile">my profile</string>
     <string name="reviews">my reviews</string>
     <string name="logout">logout</string>
@@ -36,4 +38,57 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="account">account</string>
+
+    <!--this strings are for the navigation drawer-->
+    <string name="restaurants">restaurants</string>
+    <string name="map">map</string>
+    <string name="favorites">my favorites</string>
+    <string name="my_reviews">my reviews</string>
+    <string name="my_profile">my profile</string>
+
+    <string name="app_title">dishes review</string>
+    <string name="contact">contact</string>
+    <string name="open_in">open in</string>
+    <string name="menu_title">menu</string>
+    <string name="choose_place">choose place</string>
+    <string name="dish_title">dish name</string>
+    <string name="dish_description">description</string>
+    <string name="currency">$</string>
+    <string name="review_checkbox">i want to review this dish</string>
+    <string name="add_picture">add image</string>
+    <string name="review_text_box">enter your review here</string>
+    <string name="edit_review">edit</string>
+    <string name="delete_review">delete</string>
+    <string name="suggest_edit">suggest an edit</string>
+    <string name="reviews_title">Reviews</string>
+
+    <string name="deletion_alert">are your sure?</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
+    <string name="cancel">cacel</string>
+    <string name="submit_anyawy">submit anyway</string>
+    <string name="deletion_success">your review has been deleted successfully!!!</string>
+    <string name="restaurant_error">failed to load restaurant!</string>
+    <string name="dish_error">failed to load the dish, select manually</string>
+    <string name="restaurant_input">please choose place</string>
+    <string name="title_input_error">please enter dish name</string>
+    <string name="price_error">please enter dish price</string>
+    <string name="missing_fields">please fill the missing fields or photos</string>
+    <string name="review_uploaded">your review has uploaded successfully</string>
+    <string name="new_dish_uploaded">new dish has uploaded successfully</string>
+    <string name="similar_dish_alert">your dish name is very similar to existing dish, do you want to review the existing dish?</string>
+    <string name="error">There was an error saving your data please retry later</string>
+    <string name="already_reviewed">you have already reviewed this dish, check under \"my reviews\"</string>
+    <string name="search">search</string>
+    <string name="edit_review_title">Edit review</string>
+    <string name="forgot_password">forgot your password?</string>
+    <string name="email_sent">check your email and reset the password</string>
+    <string name="nearby">Nearby restaurants</string>
+    <string name="add_or_review">Add or review dish</string>
+    <string name="results_title">Results for %1$s</string>
+
+    <plurals name="reviews_num">
+        <item quantity="one">%s review</item>
+        <item quantity="many">%s reviews</item>
+    </plurals>
 </resources>

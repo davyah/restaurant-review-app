@@ -63,8 +63,8 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
             });
             holder.res_name.setText(storeModels.get(position).name);
 
-            Picasso.with(context).load(storeModels.get(position) .photourl)
-                    .resize(100, 100).into(holder.res_image);
+            Picasso.with(context).load(storeModels.get(position).photourl)
+                    .centerCrop().fit().into(holder.res_image);
 
 
             holder.res_address.setText(storeModels.get(position).address);

@@ -21,6 +21,7 @@ import com.example.user.restaurantreviewapp.customfonts.MyTextView_Roboto_Regula
 import com.example.user.restaurantreviewapp.helper.ContentLoader;
 import com.example.user.restaurantreviewapp.model.Dish;
 import com.example.user.restaurantreviewapp.model.Review;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -81,7 +82,8 @@ public class MealDetailsFragment extends Fragment {
     @BindView(R.id.ratingBar_Id)
     RatingBar ratingBar;
 
-
+    @BindView(R.id.add_review)
+    FloatingActionButton fab;
 
     ReviewsListAdapter reviewsListAdapter;
 
@@ -122,6 +124,22 @@ public class MealDetailsFragment extends Fragment {
         } else {
             userID = user.getUid();
         }
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("dishID", dish.getDishID());
+                bundle.putString("placeID", dish.getPlaceID());
+                activity.replaceFragments(AddOrReviewMealFragment.class, bundle);
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        reviews.clear();
         dish = gson.fromJson(getArguments().getString("dish"), Dish.class);
         reviewsRcv.setLayoutManager(new LinearLayoutManager(activity, RecyclerView.VERTICAL, false));
         loadReviews();
@@ -129,7 +147,6 @@ public class MealDetailsFragment extends Fragment {
         dishViewPager.setAdapter(viewPagerAdapter);
         initializeUI();
     }
-
 
     public void loadReviews()
     {
@@ -175,7 +192,7 @@ public class MealDetailsFragment extends Fragment {
         ratingBar.setRating(average);
         priceTV.setAmount(dish.getPrice());
         dishDescription.setText(dish.getDescription());
-        numOfReviews.setText(String.valueOf(numOfReviewers) + " reviews");
+        numOfReviews.setText(String.valueOf(numOfReviewers) + " " + activity.getResources().getString(R.string.reviews_title));
     }
 
 }

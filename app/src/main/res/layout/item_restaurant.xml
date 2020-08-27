@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="270dp"
     android:orientation="vertical">
@@ -9,7 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="3dp"
-        android:elevation="5dp">
+        android:elevation="5dp"
+        app:cardCornerRadius="5dp">
 
 
         <LinearLayout
@@ -30,13 +32,13 @@
                     android:src="@drawable/img1"
                     app:civ_border_width="2dp" />
 
-                <ImageView
-                    android:id="@+id/nearbyimg2"
-                    android:layout_width="17.3dp"
-                    android:layout_height="14.5dp"
-                    android:layout_marginLeft="140dp"
-                    android:layout_marginTop="6.7dp"
-                    android:src="@drawable/ic_like" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/nearbyimg2"-->
+<!--                    android:layout_width="17.3dp"-->
+<!--                    android:layout_height="14.5dp"-->
+<!--                    android:layout_marginLeft="140dp"-->
+<!--                    android:layout_marginTop="6.7dp"-->
+<!--                    android:src="@drawable/ic_like" />-->
 
             </FrameLayout>
 
@@ -44,27 +46,31 @@
                 android:id="@+id/res_name"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginLeft="12.5dp"
+                android:layout_marginStart="12.5dp"
+                android:layout_marginEnd="12.5dp"
                 android:layout_marginTop="11.5dp"
                 android:text="Cocobolo Poolside \n
                    Bar + Grill"
                 android:textColor="#262628"
-                android:textSize="14.4sp" />
+                android:textSize="14.4sp"
+                android:textAlignment="viewStart"/>
 
             <com.example.user.restaurantreviewapp.customfonts.MyTextView_Roboto_Regular
                 android:id="@+id/address"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginLeft="12.5dp"
+                android:layout_marginStart="12.5dp"
+                android:layout_marginEnd="12.5dp"
                 android:layout_marginTop="6.3dp"
                 android:text="60 Kub Pines Apt. 797"
                 android:textColor="#9b9b9b"
-                android:textSize="11.5sp" />
+                android:textSize="11.5sp"
+                android:textAlignment="viewStart"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12.5dp"
+                android:layout_marginStart="12.5dp"
                 android:layout_marginTop="7.8dp"
                 android:layout_marginBottom="11.dp"
                 android:orientation="horizontal">
@@ -75,7 +81,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:focusable="true"
-                    android:progressTint="@android:color/holo_red_dark"
+                    android:progressTint="@color/rating_bar_color"
                     android:rating="4"
                     android:stepSize="0.1" />
 
@@ -83,7 +89,7 @@
                     android:id="@+id/nearbytext3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="2.6dp"
+                    android:layout_marginStart="2.6dp"
                     android:text="238 reviews"
                     android:textColor="#9b9b9b"
                     android:textSize="11.5sp" />

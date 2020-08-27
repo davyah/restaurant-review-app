@@ -9,7 +9,7 @@
 
 
     <ScrollView
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +24,7 @@
                 android:layout_marginTop="70dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="50dp"
-                android:hint="choose a place"
+                android:hint="@string/choose_place"
                 app:layout_constraintBottom_toTopOf="@+id/meal_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -35,12 +35,12 @@
                 android:id="@+id/meal_title"
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
-                android:completionThreshold="1"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="50dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="17dp"
-                android:hint="title"
+                android:completionThreshold="1"
+                android:hint="@string/dish_title"
                 app:layout_constraintBottom_toTopOf="@+id/mealDescription"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -55,7 +55,7 @@
                 android:layout_marginTop="17dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="10dp"
-                android:hint="description"
+                android:hint="@string/dish_description"
                 android:inputType="textMultiLine"
                 android:scrollHorizontally="false"
                 app:layout_constraintBottom_toTopOf="@+id/priceTextView"
@@ -83,7 +83,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mealDescription"
-                app:symbol="$"
+                app:symbol="@string/currency"
                 app:symbolGravity="start|bottom"
                 app:symbolMargin="6dp"
                 app:symbolTextSize="20sp" />
@@ -111,7 +111,8 @@
                 android:layout_marginEnd="7dp"
                 app:layout_constraintEnd_toStartOf="@+id/textView3"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/priceTextView" />
+                app:layout_constraintTop_toBottomOf="@+id/priceTextView"
+                android:buttonTint="@color/rating_bar_color"/>
 
             <com.example.user.restaurantreviewapp.customfonts.MyTextView_Roboto_Regular
                 android:id="@+id/textView3"
@@ -120,7 +121,7 @@
                 android:layout_marginStart="7dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="143dp"
-                android:text="i want to review this meal"
+                android:text="@string/review_checkbox"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/ratingCheckbox"
@@ -151,7 +152,7 @@
                     android:layout_marginEnd="20dp"
                     android:ems="10"
                     android:gravity="start|top"
-                    android:hint="enter your review here"
+                    android:hint="@string/review_text_box"
                     android:inputType="textMultiLine"
                     app:layout_constraintBottom_toTopOf="@+id/ratingBar1"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -159,70 +160,24 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.example.user.restaurantreviewapp.customfonts.MyTextView_Roboto_Regular
-                    android:id="@+id/category1"
-                    android:layout_width="135dp"
-                    android:layout_height="34dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="20dp"
-                    android:text="category1"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="24sp"
-                    app:layout_constraintBottom_toTopOf="@+id/category2"
-                    app:layout_constraintEnd_toStartOf="@id/ratingBar1"
-                    app:layout_constraintHorizontal_bias="0.233"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/reviewDescription" />
 
                 <RatingBar
                     android:id="@+id/ratingBar1"
                     style="@android:style/Widget.Material.RatingBar.Indicator"
-                    android:isIndicator="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginBottom="20dp"
-                    android:numStars="5"
-                    app:layout_constraintBottom_toTopOf="@+id/ratingBar2"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/category2"
-                    app:layout_constraintTop_toBottomOf="@+id/reviewDescription" />
-
-                <com.example.user.restaurantreviewapp.customfonts.MyTextView_Roboto_Regular
-                    android:id="@+id/category2"
-                    android:layout_width="135dp"
-                    android:layout_height="34dp"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="20dp"
-                    android:text="category2"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="24sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/ratingBar2"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/category1" />
-
-                <RatingBar
-                    android:id="@+id/ratingBar2"
-                    style="@android:style/Widget.Material.RatingBar.Indicator"
                     android:isIndicator="false"
-                    android:layout_width="181dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_marginBottom="20dp"
                     android:numStars="5"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/category2"
-                    app:layout_constraintTop_toBottomOf="@+id/ratingBar1" />
+
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/reviewDescription" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -249,10 +204,10 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="100dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/rectangle"
+                android:background="@drawable/round_corner"
                 android:gravity="center_horizontal"
                 android:padding="16.4dp"
-                android:text="submit"
+                android:text="@string/save"
                 android:textColor="#ffffff"
                 android:textSize="13.3sp"
                 app:layout_constraintBottom_toBottomOf="parent"

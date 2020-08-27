@@ -2,6 +2,8 @@ package com.example.user.restaurantreviewapp.placesApi;
 
 import android.util.Log;
 
+import com.example.user.restaurantreviewapp.R;
+
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -14,23 +16,25 @@ public class PlaceProvider {
     private APIInterface apiService;
     private PlaceProviderListener listener;
 
-    String placeType, latLngString, queryString;
+    String placeType, latLngString, queryString, language;
     long radius;
 
-    public PlaceProvider(String placeType, String latLngString, long radius) {
+    public PlaceProvider(String placeType, String latLngString, long radius, String language) {
         this.placeType = placeType;
         this.latLngString = latLngString;
         this.radius = radius;
+        this.language = language;
         apiService = ApiClient.getClient().create(APIInterface.class);
         fetchPlaces();
     }
 
-    public PlaceProvider(String placeType, String latLanString, long radius, String queryString)
+    public PlaceProvider(String placeType, String latLanString, long radius, String queryString, String language)
     {
         this.queryString = queryString;
         this.placeType = placeType;
         this.latLngString = latLanString;
         this.radius = radius;
+        this.language = language;
         apiService = ApiClient.getClient().create(APIInterface.class);
         searchPlaces();
     }
@@ -40,14 +44,15 @@ public class PlaceProvider {
     }
 
     private void fetchPlaces() {
-        Call<PlacesResponse.Root> call = apiService.doPlaces(latLngString, radius, placeType, ApiClient.GOOGLE_PLACE_API_KEY);
+        Call<PlacesResponse.Root> call = apiService.doPlaces(latLngString, language ,radius, placeType, ApiClient.GOOGLE_PLACE_API_KEY);
         call.enqueue(callback);
     }
 
 
     private void searchPlaces()
     {
-        Call<PlacesResponse.Root> call = apiService.searchPlaces(queryString, latLngString, radius, placeType, ApiClient.GOOGLE_PLACE_API_KEY);
+        Log.w("search language: ", language);
+        Call<PlacesResponse.Root> call = apiService.searchPlaces(queryString, latLngString, language, radius, placeType, ApiClient.GOOGLE_PLACE_API_KEY);
         call.enqueue(callback);
     }
 
@@ -104,7 +109,7 @@ public class PlaceProvider {
     private void fetchPlace_details(final PlacesResponse.CustomA info, final String place_id, final String totaldistance, final String name, final String photourl)
     {
 
-        Call<PlaceResponse> call = apiService.getPlaceDetails(place_id, ApiClient.GOOGLE_PLACE_API_KEY);
+        Call<PlaceResponse> call = apiService.getPlaceDetails(place_id, language , ApiClient.GOOGLE_PLACE_API_KEY);
         call.enqueue(new Callback<PlaceResponse>() {
             @Override
             public void onResponse(Call<PlaceResponse> call, Response<PlaceResponse> response) {

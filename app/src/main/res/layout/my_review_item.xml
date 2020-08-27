@@ -44,6 +44,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="4dp"
+                    android:textAlignment="viewStart"
                     android:text="pizza" />
 
                 <RatingBar
@@ -58,14 +59,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="4dp"
+                    android:textAlignment="viewStart"
                     android:text="2 hours ago" />
 
                 <com.example.user.restaurantreviewapp.customfonts.MyTextView_Roboto_Regular
                     android:id="@+id/myReviewText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
+                    android:inputType="textMultiLine|textNoSuggestions"
                     android:padding="4dp"
+                    android:textAlignment="viewStart"
                     android:text="khiuhdfiugiugfjbhkfhiudfhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh" />
             </LinearLayout>
 

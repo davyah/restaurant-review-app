@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
@@ -31,6 +32,7 @@ import com.example.user.restaurantreviewapp.placesApi.LocationProvider;
 import com.example.user.restaurantreviewapp.placesApi.Place;
 import com.example.user.restaurantreviewapp.placesApi.PlaceProvider;
 import com.example.user.restaurantreviewapp.placesApi.PlacesResponse;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -42,7 +44,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class SearchResultsFragment extends Fragment implements onBackPressed{
+public class SearchResultsFragment extends Fragment{
     private HomepageAdapter homepageAdapter;
     APIInterface apiService;
     public String latLngString;
@@ -65,6 +67,9 @@ public class SearchResultsFragment extends Fragment implements onBackPressed{
 
     @BindView(R.id.search_results_view)
     ShimmerRecyclerView shimmerRecycler;
+
+    @BindView(R.id.add_meal_or_review)
+    FloatingActionButton fab;
 
     MainActivity activity;
 
@@ -92,12 +97,27 @@ public class SearchResultsFragment extends Fragment implements onBackPressed{
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        queryString = getArguments().getString("queryText");
         apiService = ApiClient.getClient().create(APIInterface.class);
         locationProvider = new LocationProvider(activity);
-        loadData();
+        restaurantsList = Collections.synchronizedList(new ArrayList<Place>());
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.replaceFragments(AddOrReviewMealFragment.class, new Bundle());
+            }
+        });
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        restaurantsList.clear();
+        queryString = getArguments().getString("queryText");
+        Toolbar toolbar = activity.findViewById(R.id.toolbar_id);
+        toolbar.setTitle(getResources().getString(R.string.results_title, queryString));
+        loadData();
+    }
 
     private void loadData() {
         ConnectivityManager connectivityManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -123,10 +143,6 @@ public class SearchResultsFragment extends Fragment implements onBackPressed{
             color = Color.RED;
         }
 
-        Snackbar snackbar = Snackbar.make(activity.findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG);
-        snackbar.setActionTextColor(color);
-
-        snackbar.show();
     }
 
     private void getUserLocation() {
@@ -164,8 +180,7 @@ public class SearchResultsFragment extends Fragment implements onBackPressed{
     }
 
     private void fetchStores(String placeType) {
-        restaurantsList = Collections.synchronizedList(new ArrayList<Place>());
-        PlaceProvider placeProvider = new PlaceProvider(placeType, latLngString, radius, queryString);
+        PlaceProvider placeProvider = new PlaceProvider(placeType, latLngString, radius, queryString, activity.getResources().getString(R.string.language));
         placeProvider.setPlaceProviderListener(new PlaceProvider.PlaceProviderListener() {
             @Override
             public void onError(String msg) {
@@ -204,8 +219,4 @@ public class SearchResultsFragment extends Fragment implements onBackPressed{
     }
 
 
-    @Override
-    public void doBack() {
-        //TODO handle back button pressed
-    }
 }

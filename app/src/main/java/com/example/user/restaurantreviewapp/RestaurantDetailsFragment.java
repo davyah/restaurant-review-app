@@ -8,7 +8,9 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -27,6 +29,7 @@ import com.example.user.restaurantreviewapp.adapter.MealListAdapter;
 import com.example.user.restaurantreviewapp.adapter.ViewPagerAdapter;
 import com.example.user.restaurantreviewapp.customfonts.MyTextView_Roboto_Regular;
 import com.example.user.restaurantreviewapp.helper.ContentLoader;
+import com.example.user.restaurantreviewapp.helper.CurrentDay;
 import com.example.user.restaurantreviewapp.helper.RestaurantLoader;
 import com.example.user.restaurantreviewapp.model.Dish;
 import com.example.user.restaurantreviewapp.model.RestaurantDetails;
@@ -40,7 +43,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -80,8 +85,8 @@ public class RestaurantDetailsFragment extends Fragment {
     @BindView(R.id.navigateImageView)
     ImageView naviImageView;
 
-    @BindView(R.id.googleReviews_rcv)
-    RecyclerView googleReviewsRCV;
+//    @BindView(R.id.googleReviews_rcv)
+//    RecyclerView googleReviewsRCV;
 
     ViewPagerAdapter viewPagerAdapter;
     RestaurantDetails restaurantDetails;
@@ -126,7 +131,7 @@ public class RestaurantDetailsFragment extends Fragment {
 
                 menu.addAll(menuMap.values());
 
-                dishesAdapter = new MealListAdapter(activity, menu, myRef, '$');
+                dishesAdapter = new MealListAdapter(activity, menu, myRef);
                 dishList.setAdapter(dishesAdapter);
                 System.out.println("we are in rdf: " + menu);
                 dishesAdapter.setClickListener(new MealListAdapter.onClickListener() {
@@ -148,17 +153,16 @@ public class RestaurantDetailsFragment extends Fragment {
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public String whatTheDay()
     {
-        Date now = new Date();
+        String currentDay = new CurrentDay().getDayAsString();
+        Log.w("current day", currentDay);
 
-        SimpleDateFormat simpleDateformat = new SimpleDateFormat("EEEE");
-        System.out.println(simpleDateformat.format(now));
-
-        String dayHours =  restaurantDetails.getDayHours(simpleDateformat.format(now));
+        String dayHours =  restaurantDetails.getDayHours(currentDay);
         if(dayHours != null) {
-            String[] parts = dayHours.split(simpleDateformat.format(now) + ":");
+            String[] parts = dayHours.split(currentDay + ":");
 
             if (parts.length > 1)
                 return parts[1];
@@ -167,6 +171,8 @@ public class RestaurantDetailsFragment extends Fragment {
         }
         else return "NA";
     }
+
+
 
     public void dialContactPhone(final String phoneNumber) {
         startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
@@ -196,15 +202,14 @@ public class RestaurantDetailsFragment extends Fragment {
         }
 
         fab.setOnClickListener(v -> {
-            String json = gson.toJson(restaurantDetails);
             Bundle args = new Bundle();
-            args.putString("restaurant", json);
-            activity.replaceFragments(AddMealFragment.class, args);
+            args.putString("placeID", restaurantDetails.getPlace_id());
+            activity.replaceFragments(AddOrReviewMealFragment.class, args);
         });
 
-        dishList.setLayoutManager(new LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false));
+        dishList.setLayoutManager(new GridLayoutManager(activity, 2));
 
-        googleReviewsRCV.setLayoutManager(new LinearLayoutManager(activity, RecyclerView.VERTICAL, false));;
+//        googleReviewsRCV.setLayoutManager(new LinearLayoutManager(activity, RecyclerView.VERTICAL, false));;
         activity.findViewById(R.id.callButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -237,23 +242,31 @@ public class RestaurantDetailsFragment extends Fragment {
     public void loadData() {
         if (placeID != null) {
             Log.w("fetch place", placeID);
-            new RestaurantLoader().loadRestaurant(placeID).setListener(new RestaurantLoader.RestaurantLoaderListener() {
+            new RestaurantLoader().loadRestaurant(placeID, activity.getResources().getString(R.string.language)).setListener(new RestaurantLoader.RestaurantLoaderListener() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onSuccess(RestaurantDetails place) {
                     Log.w("render place", place.getFormatted_address());
                     restaurantDetails = place;
                     resName.setText(restaurantDetails.getName());
+
+                    Toolbar toolbar = activity.findViewById(R.id.toolbar_id);
+                    toolbar.setTitle(restaurantDetails.getName());
+
                     resAddress.setText(restaurantDetails.getFormatted_address());
                     ratingBar.setRating(restaurantDetails.getRating());
-                    reviewsNum.setText(Integer.toString(restaurantDetails.getUser_ratings_total()) + " reviews");
+                    reviewsNum.setText(Integer.toString(restaurantDetails.getUser_ratings_total()) +" " + activity.getResources().getString(R.string.reviews_title));
                     hours.setText(whatTheDay());
                     viewPagerAdapter = new ViewPagerAdapter(activity, restaurantDetails.PhotosUrl());
                     viewPager.setAdapter(viewPagerAdapter);
 
                     //load google reviews
-                    googleReviewsAdapter = new GoogleReviewsAdapter(place.getGoogleReviews(), activity);
-                    googleReviewsRCV.setAdapter(googleReviewsAdapter);
+//                    if(place.getGoogleReviews() != null)
+//                    {
+//                        googleReviewsAdapter = new GoogleReviewsAdapter(place.getGoogleReviews(), activity);
+//                        googleReviewsRCV.setAdapter(googleReviewsAdapter);
+//                    }
+
                     loadMenuIfExists();
                 }
 

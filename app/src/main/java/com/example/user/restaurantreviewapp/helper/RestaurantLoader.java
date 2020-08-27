@@ -34,15 +34,16 @@ public class RestaurantLoader {
 
     String baseUrl = "https://maps.googleapis.com/maps/api/place/details/json?placeid=";
 
-    String placeID;
+    String placeID, language;
 
     Gson gson = new Gson();
 
-    public RestaurantLoader loadRestaurant(String placeID)
+    public RestaurantLoader loadRestaurant(String placeID, String language)
     {
         this.placeID = placeID;
+        this.language = language;
         fetchStore task = new fetchStore();
-        task.execute(this.placeID);
+        task.execute(this.placeID, this.language);
         return this;
     }
 
@@ -56,7 +57,8 @@ public class RestaurantLoader {
         @Override
         protected String doInBackground(String... urls) {
             try {
-                String res = IOUtils.toString(new URL(baseUrl + urls[0] + "&key=" + ApiClient.GOOGLE_PLACE_API_KEY), "UTF-8");
+                String res = IOUtils.toString(new URL(baseUrl + urls[0] + "&language=" + urls[1] + "&key=" + ApiClient.GOOGLE_PLACE_API_KEY), "UTF-8");
+                Log.w("result from google", res);
                 return res;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -71,7 +73,6 @@ public class RestaurantLoader {
                 if(s != null){
                     JSONObject jsonObject = new JSONObject(s);
                     restaurantDetails = gson.fromJson(jsonObject.getString("result"), RestaurantDetails.class);
-                    System.out.println(restaurantDetails.getGoogleReviews().toString());
                     if(listener != null)
                         listener.onSuccess(restaurantDetails);
                 }
